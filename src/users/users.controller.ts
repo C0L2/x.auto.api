@@ -12,10 +12,12 @@ import {
 import { AuthService } from './auth.service';
 import { LoignUserDto } from './dto/login-user.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Authentification/Authorization')
 @Controller('auth')
 export class UsersController {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) { }
 
   @Post('/register')
   @UseInterceptors(SerializeInterceptor)

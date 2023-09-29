@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import config from 'config';
 import { PassportModule } from '@nestjs/passport';
 import { SessionModule } from 'nestjs-session';
+import { RoleModule } from './role/role.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { SessionModule } from 'nestjs-session';
         configService.get<TypeOrmModuleOptions>('database'),
     }),
     UsersModule,
+    RoleModule,
   ],
   controllers: [AppController],
   providers: [AppService],

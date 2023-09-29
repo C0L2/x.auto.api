@@ -4,11 +4,9 @@ import { UsersModule } from './users/users.module';
 import { AppController } from './app.controller';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TeamsModule } from './teams/teams.module';
 import config from 'config';
 import { PassportModule } from '@nestjs/passport';
 import { SessionModule } from 'nestjs-session';
-import { UserTeamModule } from './user-team/user-team.module';
 
 @Module({
   imports: [
@@ -22,11 +20,9 @@ import { UserTeamModule } from './user-team/user-team.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) =>
-        configService.get<TypeOrmModuleOptions>("database"),
+        configService.get<TypeOrmModuleOptions>('database'),
     }),
     UsersModule,
-    TeamsModule,
-    UserTeamModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -21,8 +21,12 @@ export class UsersController {
   @UseInterceptors(SerializeInterceptor)
   async createUser(@Body() body: CreateUserDto) {
     const user = await this.authService.reg(
-      body.nickname,
+      body.first_name,
+      body.second_name,
+      body.father_name,
       body.email,
+      body.birth_date,
+      body.role,
       body.password,
     );
     return { message: 'Registered successfully', user: body };
@@ -32,7 +36,11 @@ export class UsersController {
   @Post('/login')
   @UseInterceptors(SerializeInterceptor)
   async loginUser(@Body() body: LoignUserDto, @Session() session: any) {
-    const token = await this.authService.login(body.email, body.password, session);
+    const token = await this.authService.login(
+      body.email,
+      body.password,
+      session,
+    );
     const res = { message: 'Logged in successfully', access_token: token };
     return res;
   }
@@ -40,19 +48,19 @@ export class UsersController {
   @Get('/protected')
   @UseGuards(AuthGuard)
   getProtectedRoute(@Session() session: any) {
-    console.log(session)
+    console.log(session);
     // Verificați dacă există datele utilizatorului în sesiune
     if (session.user) {
       // Verificați dacă sesiunea conține datele utilizatorului sau alte informații relevante
       const userData = session.user;
-      
+
       // Aici puteți efectua orice alte verificări suplimentare necesare, cum ar fi verificarea tokenului expirat
       // ...
-      
+
       console.log('User is logged in:', userData);
-      return {message:'Welcome to the protected route!'};
+      return { message: 'Welcome to the protected route!' };
     } else {
-      console.log(session)
+      console.log(session);
       // Utilizatorul nu este autentificat sau sesiunea nu conține datele utilizatorului
       return 'Unauthorized';
     }

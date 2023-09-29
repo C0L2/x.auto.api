@@ -3,15 +3,15 @@ var dbConfig = {
   host: 'localhost',
   port: 5432,
   username: 'tequilabot',
-  password: '-proshootbox',
-  database: 'shootbox-db',
+  password: 'test',
+  database: 'x.auto-service',
   synchronize: true,
-  entities: ["dist/**/*.entity.js"],
+  entities: ['dist/**/*.entity.js'],
   migrations: ['migrations/*.js'],
   cli: {
     migrationsDir: 'migrations',
   },
-  migrationsRun: false,
+  migrationsRun: true,
 };
 
 module.exports = dbConfig;

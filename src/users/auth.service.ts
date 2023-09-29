@@ -2,11 +2,9 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
-  Req, Res,
-  Session
+  Session,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { Request, Response } from 'express';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
 import { JwtService } from '@nestjs/jwt';
@@ -20,7 +18,15 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async validateUser(email: string, password: string): Promise<any> {
+  async validateUser(
+    first_name: string,
+    second_name: string,
+    father_name: string,
+    email: string,
+    birth_date: Date,
+    role: string,
+    password: string,
+  ): Promise<any> {
     const user = await this.usersService.findByEmail(email);
 
     if (user && user.password === password) {
@@ -30,23 +36,34 @@ export class AuthService {
     return null;
   }
 
-  async reg(nickname: string, email: string, password: string) {
+  async reg(
+    first_name: string,
+    second_name: string,
+    father_name: string,
+    email: string,
+    birth_date: Date,
+    role: string,
+    password: string,
+  ) {
     const userEmail = await this.usersService.findByEmail(email);
-    const userNickname = await this.usersService.findByNickname(nickname);
 
     if (userEmail) {
       throw new BadRequestException('Email is already in use');
-    }
-
-    if (userNickname) {
-      throw new BadRequestException('Nickname is already in use');
     }
 
     const salt = randomBytes(8).toString('hex');
     const hash = (await scrypt(password, salt, 32)) as Buffer;
     const result = salt + '.' + hash.toString('hex');
 
-    const user = await this.usersService.create(nickname, email, result);
+    const user = await this.usersService.create(
+      first_name,
+      second_name,
+      father_name,
+      email,
+      birth_date,
+      role,
+      result,
+    );
     return user;
   }
 
@@ -64,12 +81,18 @@ export class AuthService {
       throw new BadRequestException('wrong password');
     }
 
-    const payload = { sub: user.id_user, user: user.nickname, email: user.email };
+    const payload = {
+      sub: user.id_user,
+      user_first_name: user.first_name,
+      user_second_name: user.second_name,
+      email: user.email,
+    };
     const access_token = this.jwtService.sign(payload);
 
     session.user = {
       id_user: user.id_user,
-      nickname: user.nickname,
+      user_first_name: user.first_name,
+      user_second_name: user.second_name,
       email: user.email,
     };
 

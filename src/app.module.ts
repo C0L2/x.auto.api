@@ -8,6 +8,7 @@ import config from 'config';
 import { PassportModule } from '@nestjs/passport';
 import { SessionModule } from 'nestjs-session';
 import { RoleModule } from './role/role.module';
+import { ServicesModule } from './services/services.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { RoleModule } from './role/role.module';
     }),
     UsersModule,
     RoleModule,
+    ServicesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -7,7 +7,6 @@ import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 
 import * as dotenv from 'dotenv';
-import { Team } from 'src/teams/team.entity';
 import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './local.strategy';
 
@@ -16,7 +15,7 @@ dotenv.config();
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'local' }),
-    TypeOrmModule.forFeature([User, Team]),
+    TypeOrmModule.forFeature([User]),
     JwtModule.register({
       secret: process.env.SECRET_KEY,
       signOptions: { expiresIn: '1200s' },

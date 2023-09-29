@@ -1,5 +1,4 @@
 import { Exclude } from 'class-transformer';
-import { Team } from 'src/teams/team.entity';
 import {
   AfterInsert,
   Entity,
@@ -8,7 +7,7 @@ import {
   AfterUpdate,
   AfterRemove,
   OneToOne,
-  OneToMany
+  OneToMany,
 } from 'typeorm';
 
 @Entity()
@@ -17,18 +16,29 @@ export class User {
   id_user: number;
 
   @Column()
-  nickname: string;
+  first_name: string;
+
+  @Column()
+  second_name: string;
+
+  @Column()
+  father_name: string;
 
   @Column()
   email: string;
 
   @Column()
+  birth_date: Date;
+
+  @Column()
+  role: string;
+
+  @Column()
   @Exclude()
   password: string;
-
+  /* 
   @OneToOne(() => Team, (team) => team.user)
-  team: Team;
-
+  team: Team; */
 
   @AfterInsert()
   logInsert() {

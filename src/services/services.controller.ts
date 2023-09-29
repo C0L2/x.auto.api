@@ -13,7 +13,7 @@ import { Services } from './services.entity';
 
 @Controller('services')
 export class ServicesController {
-  constructor(private service: ServicesService) {}
+  constructor(private service: ServicesService) { }
 
   @Post('create-new-service')
   async createUser(@Body() body: CreateServiceDto) {
@@ -35,7 +35,7 @@ export class ServicesController {
     return this.service.getAll();
   }
 
-  @Delete(':id')
+  @Delete('delete-service/:id')
   async removeRole(@Param('id') id: number) {
     await this.service.remove(id);
     return { message: `Successfully deleted service with id of: ${id}` };

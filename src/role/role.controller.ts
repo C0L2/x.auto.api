@@ -17,7 +17,7 @@ import { Role } from './role.entity';
 
 @Controller('role')
 export class RoleController {
-  constructor(private roleService: RoleService) {}
+  constructor(private roleService: RoleService) { }
 
   @Post('create-new-role')
   async createUser(@Body() body: CreateRoleDto) {
@@ -36,7 +36,7 @@ export class RoleController {
     return this.roleService.getAll();
   }
 
-  @Delete(':id')
+  @Delete('delete-role/:id')
   async removeRole(@Param('id') id: number) {
     await this.roleService.remove(id);
     return { message: `Successfully deleted role with id of: ${id}` };

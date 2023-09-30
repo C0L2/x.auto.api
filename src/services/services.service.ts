@@ -4,7 +4,7 @@ import { Services } from './services.entity';
 import { Repository } from 'typeorm';
 import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('Roles Routes')
+@ApiTags('Services Routes')
 @Injectable()
 export class ServicesService {
   constructor(@InjectRepository(Services) private repo: Repository<Services>) { }

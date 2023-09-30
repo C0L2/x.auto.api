@@ -27,10 +27,6 @@ export class RoleController {
     schema: {
       type: 'object',
       properties: {
-        role_id: {
-          type: 'number',
-          example: 90
-        },
         role_name: {
           type: 'string',
           example: 'admin'

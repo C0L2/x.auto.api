@@ -22,7 +22,6 @@ export class WorkerController {
     private roleService: RoleService) { }
 
   @Post('/register')
-  @ApiOperation({ summary: 'Create a new registration of user and temporary save in the database' })
   @UseInterceptors(SerializeInterceptor)
   @ApiBody({
     schema: {
@@ -82,9 +81,6 @@ export class WorkerController {
     }
   }
 
-
-
-  // @UseGuards(AuthGuard('local'))
   @Post('/login')
   @UseInterceptors(SerializeInterceptor)
   @ApiBody({
@@ -115,20 +111,11 @@ export class WorkerController {
   @Get('/protected')
   @UseGuards(AuthGuard)
   getProtectedRoute(@Session() session: any) {
-    console.log(session);
-    // Verificați dacă există datele utilizatorului în sesiune
     if (session.worker) {
-      // Verificați dacă sesiunea conține datele utilizatorului sau alte informații relevante
       const workerData = session.worker;
 
-      // Aici puteți efectua orice alte verificări suplimentare necesare, cum ar fi verificarea tokenului expirat
-      // ...
-
-      console.log('Worker is logged in:', workerData);
       return { message: 'Welcome to the protected route!' };
     } else {
-      console.log(session);
-      // Utilizatorul nu este autentificat sau sesiunea nu conține datele utilizatorului
       return 'Unauthorized';
     }
   }

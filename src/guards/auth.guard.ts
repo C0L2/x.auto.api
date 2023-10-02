@@ -3,11 +3,11 @@ import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private jwtService: JwtService) {}
+  constructor(private jwtService: JwtService) { }
 
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest();
-    console.log('request.session  ',request.session)
+    console.log('request.session  ', request.session)
 
     // Accesați token-ul JWT din sesiune (în acest exemplu, presupunem că este stocat într-un câmp numit 'jwt_token')
     const token = request.session.jwt_token;

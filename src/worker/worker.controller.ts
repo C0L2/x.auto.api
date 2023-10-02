@@ -87,6 +87,21 @@ export class WorkerController {
   // @UseGuards(AuthGuard('local'))
   @Post('/login')
   @UseInterceptors(SerializeInterceptor)
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          example: 'vasile@gmail.com'
+        },
+        password: {
+          type: 'string',
+          example: 'sju******5*****asd'
+        }
+      }
+    }
+  })
   async loginUser(@Body() body: LoignWorkerDto, @Session() session: any) {
     const token = await this.authService.login(
       body.email,

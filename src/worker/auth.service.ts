@@ -100,7 +100,7 @@ export class AuthService {
       worker_first_name: worker.nume_lucrator,
       worker_second_name: worker.prenume_lucrator,
       email: worker.email,
-      role: worker.role_id
+      role_id: worker.role_id
     };
 
     session.jwt_token = access_token;

@@ -1,5 +1,4 @@
-import { Exclude } from "class-transformer";
-import { IsEmail, IsNumber, IsString } from "class-validator";
+import { IsEmail, IsNumber, IsString } from 'class-validator';
 
 export class CreateClientDto {
     @IsString()
@@ -15,7 +14,6 @@ export class CreateClientDto {
     numar_telefon: string
 
     @IsString()
-    @Exclude()
     password: string;
 
     @IsNumber()

@@ -12,7 +12,7 @@ import {
 import { AuthService } from './auth.service';
 import { LoignWorkerDto } from './dto/login-worker.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
-import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { RoleService } from 'src/role/role.service';
 
 @ApiTags('Authentification/Authorization')

@@ -12,7 +12,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
   app.use(
     session({
-      secret: 'somevalueHere',
+      secret: process.env.JWT_KEY!,
       resave: false,
       saveUninitialized: false,
       cookie: { secure: false },

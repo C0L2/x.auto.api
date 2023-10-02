@@ -8,8 +8,7 @@ import { RoleService } from 'src/role/role.service';
 @Injectable()
 export class WorkerService {
   constructor(
-    @InjectRepository(Worker) private repo: Repository<Worker>,
-    private roleRepo: RoleService) { }
+    @InjectRepository(Worker) private repo: Repository<Worker>) { }
 
   async create(
     nume_lucrator: string,
@@ -17,20 +16,20 @@ export class WorkerService {
     email: string,
     numar_telefon: string,
     salary: number,
-    role_id: number, // Argumentul role trebuie să fie de tipul Role
+    role_id: number,
     password: string,
-  ) {
+  ): Promise<Worker> {
     const worker = this.repo.create({
       nume_lucrator,
       prenume_lucrator,
       email,
       numar_telefon,
       salary,
-      role_id, // Atribuiți direct obiectul Role
+      role_id,
       password,
     });
 
-    return this.repo.save(worker);
+    return await this.repo.save(worker);
   }
 
 

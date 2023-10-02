@@ -39,7 +39,7 @@ export class AuthService {
     email: string,
     numar_telefon: string,
     salary: number,
-    role_id: number, // Aceasta este noua variabilă roleId
+    role_id: number,
     password: string,
   ) {
     const workerEmail = await this.workersService.findByEmail(email);
@@ -48,12 +48,10 @@ export class AuthService {
       throw new BadRequestException('Email is already in use');
     }
 
-    // Obțineți obiectul Role corespunzător
-    const role = await this.roleService.findRoleById(role_id); // Obțineți obiectul Role corespunzător
+    const role = await this.roleService.findRoleById(role_id);
     if (!role) {
       throw new NotFoundException('Role not found');
     }
-    const role_id_extracted = role.role_id
 
     const salt = randomBytes(8).toString('hex');
     const hash = (await scrypt(password, salt, 32)) as Buffer;

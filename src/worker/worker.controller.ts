@@ -13,14 +13,12 @@ import { AuthService } from './auth.service';
 import { LoignWorkerDto } from './dto/login-worker.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { WorkerService } from './worker.service';
 import { RoleService } from 'src/role/role.service';
 
 @ApiTags('Authentification/Authorization')
 @Controller('auth')
 export class WorkerController {
   constructor(private authService: AuthService,
-    private workerService: WorkerService,
     private roleService: RoleService) { }
 
   @Post('/register')
@@ -61,23 +59,24 @@ export class WorkerController {
       }
     }
   })
+
   async createUser(@Body() body: CreateWorkerDto) {
     try {
-      const role = await this.roleService.findRoleById(body.role_id); // Obțineți obiectul Role corespunzător role_id
+      const role = await this.roleService.findRoleById(body.role_id);
       if (!role) {
         throw new Error('Role not found');
       }
 
-      const worker = await this.workerService.create(
+      const worker = await this.authService.reg(
         body.nume_lucrator,
         body.prenume_lucrator,
         body.email,
         body.numar_telefon,
         body.salary,
-        body.role_id, // Furnizați obiectul Role
+        body.role_id,
         body.password,
       );
-      return { message: 'Registered successfully', worker };
+      return { message: 'Registered successfully', worker: body };
     } catch (error) {
       return { message: 'Registration failed', error: error.message };
     }

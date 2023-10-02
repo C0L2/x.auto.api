@@ -6,12 +6,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 
-import * as dotenv from 'dotenv';
 import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './local.strategy';
 import { Role } from 'src/role/role.entity';
 import { RoleService } from 'src/role/role.service';
 
+import * as dotenv from 'dotenv';
 dotenv.config();
 
 @Module({
@@ -19,7 +19,7 @@ dotenv.config();
     PassportModule.register({ defaultStrategy: 'local' }),
     TypeOrmModule.forFeature([Worker, Role]),
     JwtModule.register({
-      secret: process.env.SECRET_KEY,
+      secret: 'secret',
       signOptions: { expiresIn: '1200s' },
     }),
   ],

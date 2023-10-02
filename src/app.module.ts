@@ -10,10 +10,14 @@ import { SessionModule } from 'nestjs-session';
 import { RoleModule } from './role/role.module';
 import { ServicesModule } from './services/services.module';
 
+
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 @Module({
   imports: [
     PassportModule.register({ session: true }),
-    SessionModule.forRoot({ session: { secret: process.env.SECRET_KEY! } }),
+    SessionModule.forRoot({ session: { secret: process.env.JWT_KEY! } }),
     ConfigModule.forRoot({
       isGlobal: true,
       load: [config],

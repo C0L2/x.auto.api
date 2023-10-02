@@ -12,7 +12,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
   app.use(
     session({
-      secret: 'somevalueHere',
+      secret: process.env.JWT_KEY!,
       resave: false,
       saveUninitialized: false,
       cookie: { secure: false },
@@ -27,7 +27,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('x.auto-service.md')
     .setDescription('Automatization process for auto-service')
-    .setVersion('0.1.3')
+    .setVersion('0.2.2')
     .addTag('API DOCUMENTATION')
     .build()
 

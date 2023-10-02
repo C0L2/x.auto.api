@@ -11,7 +11,7 @@ var dbConfig = {
   cli: {
     migrationsDir: 'migrations',
   },
-  migrationsRun: true,
+  migrationsRun: false,
 };
 
 module.exports = dbConfig;

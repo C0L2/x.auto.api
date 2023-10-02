@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
+import { WorkerModule } from './worker/workers.module';
 import { AppController } from './app.controller';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -9,11 +9,17 @@ import { PassportModule } from '@nestjs/passport';
 import { SessionModule } from 'nestjs-session';
 import { RoleModule } from './role/role.module';
 import { ServicesModule } from './services/services.module';
+import { ClientModule } from './client/client.module';
+import { ProgramariModule } from './programari/programari.module';
+
+
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 @Module({
   imports: [
     PassportModule.register({ session: true }),
-    SessionModule.forRoot({ session: { secret: process.env.SECRET_KEY! } }),
+    SessionModule.forRoot({ session: { secret: process.env.JWT_KEY! } }),
     ConfigModule.forRoot({
       isGlobal: true,
       load: [config],
@@ -21,12 +27,13 @@ import { ServicesModule } from './services/services.module';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) =>
-        configService.get<TypeOrmModuleOptions>('database'),
+      useFactory: (configService: ConfigService) => configService.get<TypeOrmModuleOptions>('database')
     }),
-    UsersModule,
+    WorkerModule,
     RoleModule,
     ServicesModule,
+    ClientModule,
+    ProgramariModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -111,6 +111,7 @@ CREATE TABLE "IstoricLucrari"(
     "start_date" DATE NOT NULL,
     "finish_date" DATE NOT NULL,
     "invoice_id" INTEGER NOT NULL,
+    "column_11" BIGINT NOT NULL
 );
 ALTER TABLE
     "IstoricLucrari" ADD PRIMARY KEY("worked_report_id");
@@ -131,6 +132,7 @@ CREATE TABLE "Programari"(
     "car_model" VARCHAR(255) NOT NULL,
     "problem_description" VARCHAR(255) NOT NULL,
     "registr_date" DATE NOT NULL,
+    "column_5" BIGINT NOT NULL
 );
 ALTER TABLE
     "Programari" ADD PRIMARY KEY("programare_id");
@@ -148,7 +150,6 @@ CREATE TABLE "Masini"(
     "vin_code" VARCHAR(255) NOT NULL,
     "culoare" VARCHAR(255) NOT NULL,
     "km" BIGINT NOT NULL
-    "model" VARCHAR(255) NOT NULL
 );
 ALTER TABLE
     "Masini" ADD PRIMARY KEY("car_id");

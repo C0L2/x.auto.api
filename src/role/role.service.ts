@@ -1,17 +1,21 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Role } from './role.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class RoleService {
-  constructor(@InjectRepository(Role) private repo: Repository<Role>) {}
+  constructor(@InjectRepository(Role) private repo: Repository<Role>) { }
 
   async create(role_name: string) {
     const role = this.repo.create({
       role_name,
     });
     return this.repo.save(role);
+  }
+
+  async findRoleById(role_id: number) {
+    return await this.repo.findOne({ where: { role_id } })
   }
 
   async getAll(): Promise<Role[]> {

@@ -9,6 +9,7 @@ import { PassportModule } from '@nestjs/passport';
 import { SessionModule } from 'nestjs-session';
 import { RoleModule } from './role/role.module';
 import { ServicesModule } from './services/services.module';
+import { ClientModule } from './client/client.module';
 
 
 import * as dotenv from 'dotenv';
@@ -30,6 +31,7 @@ dotenv.config();
     WorkerModule,
     RoleModule,
     ServicesModule,
+    ClientModule,
   ],
   controllers: [AppController],
   providers: [AppService],

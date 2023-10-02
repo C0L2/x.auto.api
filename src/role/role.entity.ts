@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Worker } from 'src/worker/worker.entity';
 
 @Entity()
 export class Role {
@@ -7,4 +8,7 @@ export class Role {
 
   @Column()
   role_name: string;
+
+  @OneToMany(() => Worker, (worker) => worker.workerRoles)
+  worker: Worker[];
 }

@@ -1,4 +1,5 @@
 import { Exclude } from 'class-transformer';
+import { Programari } from 'src/programari/programari.entity';
 import { Role } from 'src/role/role.entity';
 import {
     Entity,
@@ -6,6 +7,7 @@ import {
     PrimaryGeneratedColumn,
     ManyToOne,
     JoinColumn,
+    OneToMany,
 } from 'typeorm';
 
 @Entity()
@@ -35,4 +37,7 @@ export class Client {
     @ManyToOne(() => Role, (clientRole) => clientRole.client, { onDelete: 'CASCADE' })
     @JoinColumn({ name: "role_id" })
     clientRoles: Role;
+
+    @OneToMany(() => Programari, (programare) => programare.clientId)
+    programare: Programari[]
 }

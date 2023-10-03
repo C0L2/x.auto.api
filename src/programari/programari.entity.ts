@@ -15,7 +15,7 @@ export class Programari {
     @Column()
     problem_description: string;
 
-    @Column()
+    @Column({ type: 'timestamp' })
     registr_date: Date;
 
     @ManyToOne(() => Client, (clientId) => clientId.client_id, { onDelete: 'CASCADE' })

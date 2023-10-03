@@ -27,7 +27,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('x.auto-service.md')
     .setDescription('Automatization process for auto-service')
-    .setVersion('0.2.2')
+    .setVersion('0.2.4')
     .addTag('API DOCUMENTATION')
     .build()
 

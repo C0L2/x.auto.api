@@ -1,4 +1,5 @@
 import { Exclude } from 'class-transformer';
+import { Masini } from 'src/masini/masini.entity';
 import { Programari } from 'src/programari/programari.entity';
 import { Role } from 'src/role/role.entity';
 import {
@@ -40,4 +41,7 @@ export class Client {
 
     @OneToMany(() => Programari, (programare) => programare.clientId)
     programare: Programari[]
+
+    @OneToMany(() => Masini, (masina) => masina.clientId)
+    masina: Masini[]
 }

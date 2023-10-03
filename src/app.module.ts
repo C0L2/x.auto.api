@@ -11,6 +11,7 @@ import { RoleModule } from './role/role.module';
 import { ServicesModule } from './services/services.module';
 import { ClientModule } from './client/client.module';
 import { ProgramariModule } from './programari/programari.module';
+import { MasiniModule } from './masini/masini.module';
 
 
 import * as dotenv from 'dotenv';
@@ -34,6 +35,7 @@ dotenv.config();
     ServicesModule,
     ClientModule,
     ProgramariModule,
+    MasiniModule,
   ],
   controllers: [AppController],
   providers: [AppService],

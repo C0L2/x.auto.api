@@ -72,7 +72,7 @@ export class ClientAuthService {
 
 
   async login(email: string, password: string, @Session() session: any) {
-    const [client] = await this.clientsService.getAllClients(email);
+    const [client] = await this.clientsService.getAllClientsByEmail(email);
 
     if (!client) {
       throw new NotFoundException('Client not found');

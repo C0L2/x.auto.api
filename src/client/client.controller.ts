@@ -6,11 +6,14 @@ import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { CreateClientDto } from './dto/create-client.dto';
 import { LoignWorkerDto } from 'src/worker/dto/login-worker.dto';
 import { AuthClientGuard } from 'src/guards/auth-client.guard';
+import { Client } from './client.entity';
+import { ClientService } from './client.service';
 
 @ApiTags('Client-Auth')
 @Controller('client')
 export class ClientController {
     constructor(private clientAuthService: ClientAuthService,
+        private clientService: ClientService,
         private roleService: RoleService) { }
 
     @Post('/register')
@@ -34,10 +37,6 @@ export class ClientController {
                 numar_telefon: {
                     type: 'string',
                     example: '+37369565000'
-                },
-                salary: {
-                    type: 'number',
-                    example: '1500'
                 },
                 password: {
                     type: 'string',
@@ -70,6 +69,11 @@ export class ClientController {
         } catch (error) {
             return { message: 'Registration failed', error: error.message };
         }
+    }
+
+    @Get('/all-clients')
+    async getAllRoutes(): Promise<Client[]> {
+        return this.clientService.getAllClients();
     }
 
     @Post('/login')

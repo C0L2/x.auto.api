@@ -46,8 +46,12 @@ export class ClientService {
         return this.repo.remove(client);
     }
 
-    getAllClients(email: string) {
+    getAllClientsByEmail(email: string) {
         return this.repo.find({ where: { email } });
+    }
+
+    async getAllClients(): Promise<Client[]> {
+        return await this.repo.find();
     }
 
     async findById(client_id: number) {

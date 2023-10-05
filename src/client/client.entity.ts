@@ -20,9 +20,6 @@ export class Client {
     nume_client: string;
 
     @Column()
-    prenume_client: string;
-
-    @Column()
     email: string;
 
     @Column()

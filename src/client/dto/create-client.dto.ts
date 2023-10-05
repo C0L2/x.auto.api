@@ -4,9 +4,6 @@ export class CreateClientDto {
     @IsString()
     nume_client: string;
 
-    @IsString()
-    prenume_client: string;
-
     @IsEmail()
     email: string;
 

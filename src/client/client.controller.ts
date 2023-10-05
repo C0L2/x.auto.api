@@ -26,10 +26,6 @@ export class ClientController {
                     type: 'string',
                     example: 'Vasile'
                 },
-                prenume_client: {
-                    type: 'string',
-                    example: 'Chiron'
-                },
                 email: {
                     type: 'string',
                     example: 'vasile@chiron.com'
@@ -58,7 +54,6 @@ export class ClientController {
 
             const client = await this.clientAuthService.reg(
                 body.nume_client,
-                body.prenume_client,
                 body.email,
                 body.numar_telefon,
                 body.password,

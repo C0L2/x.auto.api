@@ -34,7 +34,6 @@ export class ClientAuthService {
 
   async reg(
     nume_client: string,
-    prenume_client: string,
     email: string,
     numar_telefon: string,
     password: string,
@@ -61,7 +60,6 @@ export class ClientAuthService {
 
     const client = await this.clientsService.create(
       nume_client,
-      prenume_client,
       email,
       numar_telefon,
       result,
@@ -87,8 +85,7 @@ export class ClientAuthService {
 
     const payload = {
       sub: client.client_id,
-      client_first_name: client.nume_client,
-      client_second_name: client.prenume_client,
+      client_name: client.nume_client,
       email: client.email,
       role_id: client.role_id
     };
@@ -96,8 +93,7 @@ export class ClientAuthService {
 
     session.client = {
       client_id: client.client_id,
-      client_first_name: client.nume_client,
-      client_second_name: client.prenume_client,
+      client_name: client.nume_client,
       email: client.email,
       role_id: client.role_id
     };

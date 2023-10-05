@@ -10,7 +10,6 @@ export class ClientService {
 
     async create(
         nume_client: string,
-        prenume_client: string,
         email: string,
         numar_telefon: string,
         password: string,
@@ -18,7 +17,6 @@ export class ClientService {
     ): Promise<Client> {
         const client = this.repo.create({
             nume_client,
-            prenume_client,
             email,
             numar_telefon,
             password,

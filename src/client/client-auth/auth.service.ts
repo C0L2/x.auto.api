@@ -103,6 +103,7 @@ export class ClientAuthService {
     };
 
     session.jwt_token = access_token;
+    console.log(session)
     return access_token;
   }
 }

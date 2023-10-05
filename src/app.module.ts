@@ -20,7 +20,7 @@ dotenv.config();
 @Module({
   imports: [
     PassportModule.register({ session: true }),
-    SessionModule.forRoot({ session: { secret: process.env.JWT_KEY! } }),
+    SessionModule.forRoot({ session: { secret: 'secret' } }),
     ConfigModule.forRoot({
       isGlobal: true,
       load: [config],

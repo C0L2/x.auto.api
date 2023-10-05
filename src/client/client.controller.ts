@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Session, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Param, Controller, Get, Post, Session, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ClientAuthService } from './client-auth/auth.service';
 import { RoleService } from 'src/role/role.service';
 import { SerializeInterceptor } from 'src/interceptors/serialize.interceptor';
@@ -49,7 +49,6 @@ export class ClientController {
             }
         }
     })
-
     async createClient(@Body() body: CreateClientDto) {
         try {
             const role = await this.roleService.findRoleById(body.role_id);
@@ -74,6 +73,17 @@ export class ClientController {
     @Get('/all-clients')
     async getAllRoutes(): Promise<Client[]> {
         return this.clientService.getAllClients();
+    }
+
+    @Get('/find-client/:client_id')
+    async fincClient(@Param('client_id') client_id: number): Promise<Client | undefined> {
+        return this.clientService.findById(client_id);
+    }
+
+    @Get('/find-client-id/:email')
+    async fincClientId(@Param('email') email: string): Promise<number | undefined> {
+        const client: any = await this.clientService.findByEmail(email,);
+        return client.client_id
     }
 
     @Post('/login')

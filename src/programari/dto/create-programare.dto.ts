@@ -4,6 +4,9 @@ export class CreateProgramareDto {
     @IsNumber()
     client_id: number;
 
+    @IsNumber()
+    client_type: number;
+
     @IsString()
     car_model: string;
 

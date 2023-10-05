@@ -9,11 +9,13 @@ export class ProgramariService {
 
     async create(
         client_id: number,
+        client_type: number,
         car_model: string,
         problem_description: string,
         registr_date: string) {
         const programare = this.repo.create({
             client_id,
+            client_type,
             car_model,
             problem_description,
             registr_date

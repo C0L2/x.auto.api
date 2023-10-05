@@ -10,6 +10,9 @@ export class Programari {
     client_id: number;
 
     @Column()
+    client_type: number;
+
+    @Column()
     car_model: string;
 
     @Column()

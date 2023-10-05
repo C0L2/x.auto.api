@@ -10,8 +10,9 @@ export class AuthClientGuard implements CanActivate {
         console.log(request.session)
 
         const token = request.session.jwt_token;
-        const role_id = request.session.client.role_id;
+        const role_id = request.session.role_id;
 
+        console.log('from ClientAuthGuard: ',role_id)
         if (!token) {
             throw new UnauthorizedException('Token missing');
         }

@@ -54,7 +54,7 @@ export class ClientService {
         return await this.repo.find();
     }
 
-    async findById(client_id: number) {
+    async findById(client_id: number): Promise<Client | undefined> {
         return await this.repo.findOne({ where: { client_id } });
     }
 

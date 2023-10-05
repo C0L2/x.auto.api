@@ -23,6 +23,10 @@ export class ProgramariController {
                     type: 'number',
                     example: '007'
                 },
+                client_type: {
+                    type: 'number',
+                    example: '1'
+                },
                 car_model: {
                     type: 'string',
                     example: 'Tranzit'
@@ -41,6 +45,7 @@ export class ProgramariController {
     async createProgramareManager(@Body() body: CreateProgramareDto) {
         const programare = await this.progService.create(
             body.client_id,
+            body.client_type,
             body.car_model,
             body.problem_description,
             body.registr_date
@@ -48,7 +53,7 @@ export class ProgramariController {
         return { message: 'Successfully added new programare', programare: body };
     }
 
-    @UseGuards(AuthClientGuard)
+    // @UseGuards(AuthClientGuard)
     @Post('new-programare')
     @ApiBody({
         schema: {
@@ -57,6 +62,10 @@ export class ProgramariController {
                 client_id: {
                     type: 'number',
                     example: '007'
+                },
+                client_type: {
+                    type: 'number',
+                    example: '1'
                 },
                 car_model: {
                     type: 'string',
@@ -76,6 +85,7 @@ export class ProgramariController {
     async createProgramare(@Body() body: CreateProgramareDto) {
         const programare = await this.progService.create(
             body.client_id,
+            body.client_type,
             body.car_model,
             body.problem_description,
             body.registr_date

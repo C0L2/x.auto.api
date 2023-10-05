@@ -31,6 +31,10 @@ export class ProgramariController {
                     type: 'string',
                     example: 'Tranzit'
                 },
+                an_fabricare: {
+                    type: 'number',
+                    example: '2005'
+                },
                 problem_description: {
                     type: 'string',
                     example: 'something was broke'
@@ -47,6 +51,7 @@ export class ProgramariController {
             body.client_id,
             body.client_type,
             body.car_model,
+            body.an_fabricare,
             body.problem_description,
             body.registr_date
         );
@@ -71,6 +76,10 @@ export class ProgramariController {
                     type: 'string',
                     example: 'Tranzit'
                 },
+                an_fabricare: {
+                    type: 'number',
+                    example: '2005'
+                },
                 problem_description: {
                     type: 'string',
                     example: 'something was broke'
@@ -87,6 +96,7 @@ export class ProgramariController {
             body.client_id,
             body.client_type,
             body.car_model,
+            body.an_fabricare,
             body.problem_description,
             body.registr_date
         );

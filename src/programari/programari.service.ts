@@ -11,12 +11,14 @@ export class ProgramariService {
         client_id: number,
         client_type: number,
         car_model: string,
+        an_fabricare: number,
         problem_description: string,
         registr_date: string) {
         const programare = this.repo.create({
             client_id,
             client_type,
             car_model,
+            an_fabricare,
             problem_description,
             registr_date
         });

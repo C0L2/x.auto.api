@@ -10,6 +10,9 @@ export class CreateProgramareDto {
     @IsString()
     car_model: string;
 
+    @IsNumber()
+    an_fabricare: number;
+
     @IsString()
     problem_description: string;
 

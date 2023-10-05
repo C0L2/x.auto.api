@@ -16,6 +16,9 @@ export class Programari {
     car_model: string;
 
     @Column()
+    an_fabricare: number;
+
+    @Column()
     problem_description: string;
 
     @Column({ type: 'timestamp' })

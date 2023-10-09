@@ -1,0 +1,22 @@
+Lista de functionalitati necesare pentru ruta depositarilor:
+
+create provider
+get all providers
+get provider by name
+edit provider by id
+delete provider from list(inform manager about this)
+
+
+create car-part
+get all car-part
+get car-part by name
+edit car-part by id
+delete car-part from list(inform manager about this)
+
+
+create tranzaction
+get all tranzations
+get tranzactions between dates
+get specific date tranzaction
+edit tranzaction by id
+delete tranzaction from list(inform manager about this)

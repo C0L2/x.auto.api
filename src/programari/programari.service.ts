@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Programari } from './programari.entity';
 import { Between, Repository } from 'typeorm';
+import { format, startOfDay, endOfDay } from 'date-fns';
 
 @Injectable()
 export class ProgramariService {
@@ -33,10 +34,6 @@ export class ProgramariService {
         return await this.repo.find({ where: { client_id } })
     }
 
-    async getAll(): Promise<Programari[]> {
-        return await this.repo.find();
-    }
-
     async remove(programare_id: number) {
         const programare = await this.repo.findOne({ where: { programare_id } });
         if (!programare) {
@@ -46,6 +43,18 @@ export class ProgramariService {
     }
 
     async getProgramariBetweenDates(startDate: string, endDate: string): Promise<Programari[]> {
+        return this.repo.find({
+            where: {
+                registr_date: Between(startDate, endDate),
+            },
+        });
+    }
+
+    async getProgramariForToday(): Promise<Programari[]> {
+        const currentDate = new Date();
+        const startDate = startOfDay(currentDate); // Ora 00:00:00 a zilei curente
+        const endDate = endOfDay(currentDate);     // Ora 23:59:59 a zilei curente
+
         return this.repo.find({
             where: {
                 registr_date: Between(startDate, endDate),

@@ -5,7 +5,7 @@ import { AuthManagerGuard } from 'src/guards/auth-manager.guard';
 import { CreateMasiniDto } from './dto/create-masini.dto';
 import { Masini } from './masini.entity';
 
-@ApiTags('Programari')
+@ApiTags('Masini')
 @Controller('masini')
 export class MasiniController {
     constructor(private carService: MasiniService) { }

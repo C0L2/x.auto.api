@@ -115,9 +115,9 @@ export class ProgramariController {
     }
 
     @UseGuards(AuthManagerGuard)
-    @Get('all-roles')
-    async getAllRoutes(): Promise<Programari[]> {
-        return this.progService.getAll();
+    @Get('programari-for-today')
+    async getProgramariForToday(): Promise<Programari[]> {
+        return this.progService.getProgramariForToday();
     }
 
     @UseGuards(AuthClientGuard)

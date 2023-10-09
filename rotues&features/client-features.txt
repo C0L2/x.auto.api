@@ -1,9 +1,9 @@
 Lista de functionalitati necesare pentru ruta depositarilor:
 
-create provider
-get all providers
-get provider by name
-edit provider by id
++ create provider 
++ get all providers
++ get provider by name
++ edit provider by id
 delete provider from list(inform manager about this)
 
 

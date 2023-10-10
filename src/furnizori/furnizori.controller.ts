@@ -44,17 +44,17 @@ export class FurnizorController {
         return { message: 'Successfully added new provider', provider: body };
     }
 
-    @Get(':provider_name')
-    async getProviderByName(@Param('provider_name') provider_name: string): Promise<Furnizori> {
-        const provider = await this.providerService.getProviderByName(provider_name);
-        if (!provider) throw new BadRequestException('No provider found with this name')
-        return provider;
-    }
-
     @Get('all-providers')
     async getAllProviders(): Promise<Furnizori[]> {
         return this.providerService.getAllProviders();
     }
+
+    /* @Get('find/:provider_name')
+    async getProviderByName(@Param('provider_name') provider_name: string): Promise<Furnizori> {
+        const provider = await this.providerService.getProviderByName(provider_name);
+        if (!provider) throw new BadRequestException('No provider found with this name')
+        return provider;
+    } */
 
     @Put('update-provider/:id')
     async updateProvider(@Param('id') id: number, @Body() updatedProviderData: Partial<Furnizori>): Promise<Furnizori> {

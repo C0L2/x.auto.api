@@ -1,8 +1,8 @@
 import { BadRequestException, Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, UseGuards } from '@nestjs/common';
-import { CreateFurnizorDto } from './dto/create-furnizot.dto';
-import { FurnizorService } from './furnizor.service';
+import { CreateFurnizorDto } from './create-furnizor.dto';
+import { FurnizorService } from './furnizori.service';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { Furnizori } from './furnizor.entity';
+import { Furnizori } from './furnnizori.entity';
 
 @ApiTags('Furnizori')
 @Controller('furnizori')
@@ -34,7 +34,7 @@ export class FurnizorController {
             }
         }
     })
-    async createCar(@Body() body: CreateFurnizorDto) {
+    async createProvider(@Body() body: CreateFurnizorDto) {
         await this.providerService.create(
             body.provider_name,
             body.provider_adress,

@@ -1,7 +1,7 @@
 import { BadGatewayException, BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Furnizori } from './furnizor.entity';
+import { Furnizori } from './furnnizori.entity';
 
 @Injectable()
 export class FurnizorService {
@@ -53,7 +53,7 @@ export class FurnizorService {
     async remove(provider_id: number) {
         const provider = await this.repo.findOne({ where: { provider_id } });
         if (!provider) {
-            throw new Error('This seprovider was not found');
+            throw new Error('This provider was not found');
         }
         return this.repo.remove(provider);
     }

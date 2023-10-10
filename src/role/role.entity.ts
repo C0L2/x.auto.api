@@ -10,9 +10,9 @@ export class Role {
   @Column()
   role_name: string;
 
-  @OneToMany(() => Worker, (worker) => worker.workerRoles)
+  @OneToMany(() => Worker, (worker) => worker.workerRoles, { onDelete: 'CASCADE' })
   worker: Worker[];
 
-  @OneToMany(() => Client, (client) => client.clientRoles)
+  @OneToMany(() => Client, (client) => client.clientRoles, { onDelete: 'CASCADE' })
   client: Client[];
 }

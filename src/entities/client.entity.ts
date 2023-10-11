@@ -6,6 +6,7 @@ import {
     JoinColumn,
     OneToMany,
 } from 'typeorm';
+import { Masini } from './masini.entity';
 
 @Entity()
 export class Client {
@@ -20,4 +21,8 @@ export class Client {
 
     @Column()
     numar_telefon: string;
+
+    @OneToMany(() => Masini, (car) => car.client, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: "client_id" })
+    car: Masini[]
 }

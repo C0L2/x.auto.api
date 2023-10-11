@@ -1,5 +1,6 @@
 import { Client } from 'src/entities/client.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany, OneToOne } from 'typeorm';
+import { WorkerReport } from './worker-report.entity';
 
 @Entity()
 export class Masini {
@@ -24,7 +25,11 @@ export class Masini {
     @Column()
     km: number;
 
-    /* @ManyToOne(() => Client, (clientId) => clientId.client_id, { onDelete: 'CASCADE' })
+    @ManyToOne(() => Client, (client) => client.car, { onDelete: 'CASCADE' })
     @JoinColumn({ name: "client_id" })
-    clientId: Client */
+    client: Client
+
+    @OneToOne(() => WorkerReport, (workerRole) => workerRole.car, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: "car_id" })
+    work_report: WorkerReport;
 }

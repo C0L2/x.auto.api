@@ -7,7 +7,9 @@ import {
   ManyToOne,
   OneToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
+import { WorkerReport } from './worker-report.entity';
 
 @Entity()
 export class Worker {
@@ -34,18 +36,7 @@ export class Worker {
   @JoinColumn({ name: "role_id" })
   workerRoles: Role;
 
-  /*  @AfterInsert()
-   logInsert() {
-     console.log('Inserted user with id of: ', this.id_user);
-   }
- 
-   @AfterUpdate()
-   logUpdate() {
-     console.log('Updated user with id of: ', this.id_user);
-   }
- 
-   @AfterRemove()
-   logRemove() {
-     console.log('Removed user with id of: ', this.id_user);
-   } */
+  @OneToMany(() => WorkerReport, (worker_report) => worker_report.worker, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: "worker_id" })
+  worker_report: WorkerReport[];
 }

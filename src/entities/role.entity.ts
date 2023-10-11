@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, JoinColumn } from 'typeorm';
 import { Worker } from 'src/entities/worker.entity';
 import { Client } from 'src/entities/client.entity';
 
@@ -11,6 +11,7 @@ export class Role {
   role_name: string;
 
   @OneToMany(() => Worker, (worker) => worker.workerRoles, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: "role_id" })
   worker: Worker[];
 
   /*   @OneToMany(() => Client, (client) => client.clientRoles, { onDelete: 'CASCADE' })

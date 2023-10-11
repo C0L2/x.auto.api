@@ -13,7 +13,7 @@ import {
 import { RoleService } from './role.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
-import { Role } from './role.entity';
+import { Role } from '../entities/role.entity';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Roles')

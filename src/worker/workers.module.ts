@@ -8,7 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 
 import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './local.strategy';
-import { Role } from 'src/role/role.entity';
+import { Role } from 'src/entities/role.entity';
 import { RoleService } from 'src/role/role.service';
 
 import * as dotenv from 'dotenv';

@@ -1,5 +1,5 @@
 import { Exclude } from 'class-transformer';
-import { Role } from 'src/role/role.entity';
+import { Role } from 'src/entities/role.entity';
 import {
   Entity,
   Column,

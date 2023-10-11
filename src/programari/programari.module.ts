@@ -6,7 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { Programari } from './programari.entity';
 import { RoleService } from 'src/role/role.service';
-import { Role } from 'src/role/role.entity';
+import { Role } from 'src/entities/role.entity';
 
 @Module({
   imports: [PassportModule.register({ defaultStrategy: 'local' }),

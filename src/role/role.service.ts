@@ -1,11 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Role } from './role.entity';
+import { Role } from '../entities/role.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class RoleService {
   constructor(@InjectRepository(Role) private repo: Repository<Role>) { }
+
+  async seed() {
+    // Poți adăuga aici cod pentru adăugarea datelor în entitate
+    const manager = new Role();
+    manager.role_name = 'manager';
+
+    const mecanic = new Role();
+    mecanic.role_name = 'mecanic';
+
+    await this.repo.save([manager, mecanic]);
+  }
 
   async create(role_name: string) {
     const role = this.repo.create({

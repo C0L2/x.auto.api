@@ -4,19 +4,17 @@ import { ProgramariService } from './programari.service';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
-import { Programari } from './programari.entity';
-import { RoleService } from 'src/role/role.service';
-import { Role } from 'src/entities/role.entity';
+import { Programari } from '../entities/programari.entity';
 
 @Module({
   imports: [PassportModule.register({ defaultStrategy: 'local' }),
-  TypeOrmModule.forFeature([Programari, Role]),
+  TypeOrmModule.forFeature([Programari]),
   JwtModule.register({
     secret: 'secret',
     signOptions: { expiresIn: '1200s' },
   }),
   ],
   controllers: [ProgramariController],
-  providers: [ProgramariService, RoleService]
+  providers: [ProgramariService]
 })
 export class ProgramariModule { }

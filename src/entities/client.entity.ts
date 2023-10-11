@@ -1,6 +1,6 @@
 import { Exclude } from 'class-transformer';
 import { Masini } from 'src/masini/masini.entity';
-import { Programari } from 'src/programari/programari.entity';
+import { Programari } from 'src/entities/programari.entity';
 import { Role } from 'src/entities/role.entity';
 import {
     Entity,

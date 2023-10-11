@@ -13,6 +13,7 @@ import { ClientModule } from './client/client.module';
 import { ProgramariModule } from './programari/programari.module';
 import { MasiniModule } from './masini/masini.module';
 import { CarPartsModule } from './car-parts/car-parts.module';
+import { WorkerReportModule } from './worker-report/worker-report.module';
 
 
 import * as dotenv from 'dotenv';
@@ -38,6 +39,7 @@ dotenv.config();
     ProgramariModule,
     MasiniModule,
     CarPartsModule,
+    WorkerReportModule,
   ],
   controllers: [AppController],
   providers: [AppService],

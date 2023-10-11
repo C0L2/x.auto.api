@@ -8,11 +8,5 @@ export class CreateClientDto {
     email: string;
 
     @IsString()
-    numar_telefon: string
-
-    @IsString()
-    password: string;
-
-    @IsNumber()
-    role_id: number;
+    numar_telefon: string;
 }

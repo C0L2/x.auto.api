@@ -24,11 +24,4 @@ export class Client {
 
     @Column()
     numar_telefon: string;
-
-    @Exclude()
-    @Column()
-    password: string;
-
-    @Column()
-    role_id: number;
 }

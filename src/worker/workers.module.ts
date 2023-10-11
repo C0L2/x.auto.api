@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { WorkerController } from './worker.controller';
 import { WorkerService } from './worker.service';
-import { Worker } from './worker.entity';
+import { Worker } from '../entities/worker.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';

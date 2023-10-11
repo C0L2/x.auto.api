@@ -1,4 +1,4 @@
-import { Client } from 'src/client/client.entity';
+import { Client } from 'src/entities/client.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
 
 @Entity()

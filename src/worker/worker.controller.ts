@@ -14,7 +14,6 @@ import { LoignWorkerDto } from './dto/login-worker.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { RoleService } from 'src/role/role.service';
-import { workerData } from 'worker_threads';
 
 @ApiTags('Authentification/Authorization')
 @Controller('worker')
@@ -83,7 +82,7 @@ export class WorkerController {
         },
         password: {
           type: 'string',
-          example: 'sju******5*****asd'
+          example: '1****'
         }
       }
     }

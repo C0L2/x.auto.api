@@ -7,7 +7,4 @@ export class Services {
 
   @Column()
   service_name: string;
-
-  @Column()
-  service_price: number;
 }

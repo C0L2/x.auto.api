@@ -1,6 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { ClientService } from 'src/client/client.service';
 import { CreateProgramareDto } from './dto/create-programare.dto';
 import { ProgramariService } from './programari.service';
 import { AuthManagerGuard } from 'src/guards/auth-manager.guard';
@@ -11,7 +10,7 @@ import { GetProgramariBetweenDatesDto } from './dto/get_programari-in-period.dto
 @ApiTags('Programari')
 @Controller('programari')
 export class ProgramariController {
-    constructor(private clientService: ClientService, private progService: ProgramariService) { }
+    constructor(private progService: ProgramariService) { }
 
     @UseGuards(AuthManagerGuard)
     @Post('new-programare-manager')
@@ -120,11 +119,11 @@ export class ProgramariController {
         return this.progService.getProgramariForToday();
     }
 
-    @UseGuards(AuthClientGuard)
+    /* @UseGuards(AuthClientGuard)
     @Get('get-clients-programari/:id')
     async getAllClientsRoutes(@Param('id') id: number): Promise<Programari[]> {
         return await this.progService.findProgramareByClientId(id);
-    }
+    } */
 
     @UseGuards(AuthManagerGuard)
     @Delete('delete-programare/:id')

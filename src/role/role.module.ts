@@ -3,7 +3,7 @@ import { RoleService } from './role.service';
 import { RoleController } from './role.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Role } from './role.entity';
-import { Worker } from 'src/worker/worker.entity';
+import { Worker } from 'src/entities/worker.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Role, Worker])],

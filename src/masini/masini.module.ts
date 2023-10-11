@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { MasiniController } from './masini.controller';
 import { MasiniService } from './masini.service';
 import { Role } from 'src/role/role.entity';
-import { Client } from 'src/client/client.entity';
+import { Client } from 'src/entities/client.entity';
 import { Masini } from './masini.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PassportModule } from '@nestjs/passport';

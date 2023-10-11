@@ -1,10 +1,11 @@
 import { Body, Controller, Get, Param, Post, UseInterceptors } from '@nestjs/common';
 import { CarPartsService } from './car-parts.service';
 import { SerializeInterceptor } from 'src/interceptors/serialize.interceptor';
-import { ApiBody } from '@nestjs/swagger';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { CreateCarPart } from './dto/create-car-part.dto';
 import { CarParts } from 'src/entities/car-parts.entity';
 
+@ApiTags('Car Parts')
 @Controller('car-parts')
 export class CarPartsController {
 

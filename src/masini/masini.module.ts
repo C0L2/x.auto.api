@@ -3,7 +3,7 @@ import { MasiniController } from './masini.controller';
 import { MasiniService } from './masini.service';
 import { Role } from 'src/entities/role.entity';
 import { Client } from 'src/entities/client.entity';
-import { Masini } from './masini.entity';
+import { Masini } from '../entities/masini.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PassportModule } from '@nestjs/passport';
 import { ClientService } from 'src/client/client.service';

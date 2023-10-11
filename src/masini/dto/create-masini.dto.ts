@@ -5,6 +5,9 @@ export class CreateMasiniDto {
     client_id: number;
 
     @IsString()
+    model: string;
+
+    @IsString()
     registration_number: string;
 
     @IsString()

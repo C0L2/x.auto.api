@@ -6,8 +6,11 @@ export class Masini {
     @PrimaryGeneratedColumn()
     car_id: number;
 
-    @Column()
+    @Column({ type: 'integer', default: 0 })
     client_id: number;
+
+    @Column()
+    model: string;
 
     @Column()
     registration_number: string;

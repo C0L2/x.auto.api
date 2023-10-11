@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Masini } from './masini.entity';
+import { Masini } from '../entities/masini.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -10,12 +10,14 @@ export class MasiniService {
 
     async create(
         client_id: number,
+        model: string,
         registration_number: string,
         vin_code: string,
         culoare: string,
         km: number) {
         const car = this.repo.create({
             client_id,
+            model,
             registration_number,
             vin_code,
             culoare,

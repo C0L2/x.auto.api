@@ -2,12 +2,10 @@ import { Body, Param, Controller, Get, Post, Session, UseGuards, UseInterceptors
 import { SerializeInterceptor } from 'src/interceptors/serialize.interceptor';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { CreateClientDto } from './dto/create-client.dto';
-import { LoignWorkerDto } from 'src/worker/dto/login-worker.dto';
-import { AuthClientGuard } from 'src/guards/auth-client.guard';
 import { Client } from '../entities/client.entity';
 import { ClientService } from './client.service';
 
-@ApiTags('Client-Auth')
+@ApiTags('Client')
 @Controller('client')
 export class ClientController {
     constructor(private clientService: ClientService) { }
@@ -50,12 +48,6 @@ export class ClientController {
     @Get('/find-client/:client_id')
     async fincClient(@Param('client_id') client_id: number): Promise<Client | undefined> {
         return this.clientService.findById(client_id);
-    }
-
-    @Get('/find-client-id/:email')
-    async fincClientId(@Param('email') email: string): Promise<number | undefined> {
-        const client: any = await this.clientService.findByEmail(email,);
-        return client.client_id
     }
 }
 

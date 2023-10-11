@@ -34,13 +34,11 @@ export class AuthService {
   }
 
   async reg(
-    nume_lucrator: string,
-    prenume_lucrator: string,
+    worker_name: string,
+    worker_surname: string,
     email: string,
-    numar_telefon: string,
-    salary: number,
-    role_id: number,
     password: string,
+    role_id: number
   ) {
     const workerEmail = await this.workersService.findByEmail(email);
 
@@ -59,13 +57,11 @@ export class AuthService {
 
     // Utilizați obiectul Role în crearea workerului
     const worker = await this.workersService.create(
-      nume_lucrator,
-      prenume_lucrator,
+      worker_name,
+      worker_surname,
       email,
-      numar_telefon,
-      salary,
-      role.role_id,
       result,
+      role.role_id,
     );
 
     return worker;
@@ -73,7 +69,7 @@ export class AuthService {
 
 
   async login(email: string, password: string, @Session() session: any) {
-    const [worker] = await this.workersService.getAllWorkers(email);
+    const worker = await this.workersService.findByEmail(email);
 
     if (!worker) {
       throw new NotFoundException('worker not found');
@@ -88,19 +84,19 @@ export class AuthService {
 
     const payload = {
       sub: worker.worker_id,
-      worker_first_name: worker.nume_lucrator,
-      worker_second_name: worker.prenume_lucrator,
+      worker_name: worker.worker_name,
+      worker_surname: worker.worker_surname,
       email: worker.email,
       role: worker.role_id
     };
     const access_token = this.jwtService.sign(payload);
 
     session.worker = {
-      worker_id: worker.worker_id,
-      worker_first_name: worker.nume_lucrator,
-      worker_second_name: worker.prenume_lucrator,
+      sub: worker.worker_id,
+      worker_name: worker.worker_name,
+      worker_surname: worker.worker_surname,
       email: worker.email,
-      role_id: worker.role_id
+      role: worker.role_id
     };
 
     session.jwt_token = access_token;

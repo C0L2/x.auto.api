@@ -11,22 +11,18 @@ export class WorkerService {
     @InjectRepository(Worker) private repo: Repository<Worker>) { }
 
   async create(
-    nume_lucrator: string,
-    prenume_lucrator: string,
+    worker_name: string,
+    worker_surname: string,
     email: string,
-    numar_telefon: string,
-    salary: number,
-    role_id: number,
     password: string,
+    role_id: number
   ): Promise<Worker> {
     const worker = this.repo.create({
-      nume_lucrator,
-      prenume_lucrator,
+      worker_name,
+      worker_surname,
       email,
-      numar_telefon,
-      salary,
-      role_id,
       password,
+      role_id
     });
 
     return await this.repo.save(worker);
@@ -34,25 +30,21 @@ export class WorkerService {
 
 
   async update(worker_id: number, attrs: Partial<Worker>) {
-    const user = await this.findById(worker_id);
-    if (!user) {
+    const worker = await this.findById(worker_id);
+    if (!worker) {
       throw new Error('worker not found');
     }
-    Object.assign(user, attrs);
+    Object.assign(worker, attrs);
 
-    return this.repo.save(user);
+    return this.repo.save(worker);
   }
 
   async remove(worker_id: number) {
-    const user = await this.repo.findOne({ where: { worker_id } });
-    if (!user) {
+    const worker = await this.repo.findOne({ where: { worker_id } });
+    if (!worker) {
       throw new Error('worker not found');
     }
-    return this.repo.remove(user);
-  }
-
-  getAllWorkers(email: string) {
-    return this.repo.find({ where: { email } });
+    return this.repo.remove(worker);
   }
 
   async findById(worker_id: number) {
@@ -61,5 +53,9 @@ export class WorkerService {
 
   findByEmail(email: string) {
     return this.repo.findOne({ where: { email } });
+  }
+
+  async getAllWorkers(): Promise<Worker[]> {
+    return await this.repo.find();
   }
 }

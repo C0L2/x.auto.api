@@ -14,9 +14,10 @@ import { LoignWorkerDto } from './dto/login-worker.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { RoleService } from 'src/role/role.service';
+import { workerData } from 'worker_threads';
 
 @ApiTags('Authentification/Authorization')
-@Controller('auth')
+@Controller('worker')
 export class WorkerController {
   constructor(private authService: AuthService,
     private roleService: RoleService) { }
@@ -27,11 +28,11 @@ export class WorkerController {
     schema: {
       type: 'object',
       properties: {
-        nume_lucrator: {
+        worker_name: {
           type: 'string',
           example: 'Vasile'
         },
-        prenume_lucrator: {
+        worker_surname: {
           type: 'string',
           example: 'Chiron'
         },
@@ -39,27 +40,18 @@ export class WorkerController {
           type: 'string',
           example: 'vasile@chiron.com'
         },
-        numar_telefon: {
+        password: {
           type: 'string',
-          example: '+37369565000'
-        },
-        salary: {
-          type: 'number',
-          example: '1500'
+          example: '1***'
         },
         role_id: {
           type: 'number',
           example: '1'
-        },
-        password: {
-          type: 'string',
-          example: '1********erd'
-        },
+        }
       }
     }
   })
-
-  async createUser(@Body() body: CreateWorkerDto) {
+  async createWorker(@Body() body: CreateWorkerDto) {
     try {
       const role = await this.roleService.findRoleById(body.role_id);
       if (!role) {
@@ -67,13 +59,11 @@ export class WorkerController {
       }
 
       const worker = await this.authService.reg(
-        body.nume_lucrator,
-        body.prenume_lucrator,
+        body.worker_name,
+        body.worker_surname,
         body.email,
-        body.numar_telefon,
-        body.salary,
-        body.role_id,
         body.password,
+        body.role_id
       );
       return { message: 'Registered successfully', worker: body };
     } catch (error) {
@@ -113,10 +103,10 @@ export class WorkerController {
   getProtectedRoute(@Session() session: any) {
     if (session.worker) {
       const workerData = session.worker;
-
+      console.log(session.worker)
       return { message: 'Welcome to the protected route!' };
     } else {
-      return 'Unauthorized';
+      return { message: 'Unauthorized' };
     }
   }
 }

@@ -2,23 +2,17 @@ import { IsEmail, IsNumber, IsString } from 'class-validator';
 
 export class CreateWorkerDto {
   @IsString()
-  nume_lucrator: string;
+  worker_name: string;
 
   @IsString()
-  prenume_lucrator: string;
+  worker_surname: string;
 
   @IsEmail()
   email: string;
 
   @IsString()
-  numar_telefon: string;
-
-  @IsNumber()
-  salary: number;
+  password: string;
 
   @IsNumber()
   role_id: number;
-
-  @IsString()
-  password: string;
 }

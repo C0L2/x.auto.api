@@ -15,19 +15,17 @@ export class Worker {
   worker_id: number;
 
   @Column()
-  nume_lucrator: string;
+  worker_name: string;
 
   @Column()
-  prenume_lucrator: string;
+  worker_surname: string;
 
   @Column()
   email: string;
 
+  @Exclude()
   @Column()
-  numar_telefon: string;
-
-  @Column()
-  salary: number;
+  password: string;
 
   @Column()
   role_id: number;
@@ -35,10 +33,6 @@ export class Worker {
   @ManyToOne(() => Role, (workerRole) => workerRole.worker, { onDelete: 'CASCADE' })
   @JoinColumn({ name: "role_id" })
   workerRoles: Role;
-
-  @Exclude()
-  @Column()
-  password: string;
 
   /*  @AfterInsert()
    logInsert() {

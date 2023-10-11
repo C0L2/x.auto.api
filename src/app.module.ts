@@ -12,6 +12,7 @@ import { ServicesModule } from './services/services.module';
 import { ClientModule } from './client/client.module';
 import { ProgramariModule } from './programari/programari.module';
 import { MasiniModule } from './masini/masini.module';
+import { CarPartsModule } from './car-parts/car-parts.module';
 
 
 import * as dotenv from 'dotenv';
@@ -36,6 +37,7 @@ dotenv.config();
     ClientModule,
     ProgramariModule,
     MasiniModule,
+    CarPartsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

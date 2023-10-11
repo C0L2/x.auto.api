@@ -13,6 +13,6 @@ export class Role {
   @OneToMany(() => Worker, (worker) => worker.workerRoles, { onDelete: 'CASCADE' })
   worker: Worker[];
 
-  @OneToMany(() => Client, (client) => client.clientRoles, { onDelete: 'CASCADE' })
-  client: Client[];
+  /*   @OneToMany(() => Client, (client) => client.clientRoles, { onDelete: 'CASCADE' })
+    client: Client[]; */
 }

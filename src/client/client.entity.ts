@@ -31,14 +31,4 @@ export class Client {
 
     @Column()
     role_id: number;
-
-    @ManyToOne(() => Role, (clientRole) => clientRole.client, { onDelete: 'CASCADE' })
-    @JoinColumn({ name: "role_id" })
-    clientRoles: Role;
-
-    @OneToMany(() => Programari, (programare) => programare.clientId)
-    programare: Programari[]
-
-    @OneToMany(() => Masini, (masina) => masina.clientId)
-    masina: Masini[]
 }

@@ -24,7 +24,7 @@ export class Programari {
     @Column({ type: 'timestamp' })
     registr_date: Date;
 
-    @ManyToOne(() => Client, (clientId) => clientId.client_id, { onDelete: 'CASCADE' })
-    @JoinColumn({ name: "client_id" })
-    clientId: Client
+    /*  @ManyToOne(() => Client, (clientId) => clientId.client_id, { onDelete: 'CASCADE' })
+     @JoinColumn({ name: "client_id" })
+     clientId: Client */
 }

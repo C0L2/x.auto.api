@@ -12,7 +12,6 @@ import { ServicesModule } from './services/services.module';
 import { ClientModule } from './client/client.module';
 import { ProgramariModule } from './programari/programari.module';
 import { MasiniModule } from './masini/masini.module';
-import { FurnizoriModule } from './furnizori/furnizori.module';
 
 
 import * as dotenv from 'dotenv';
@@ -37,7 +36,6 @@ dotenv.config();
     ClientModule,
     ProgramariModule,
     MasiniModule,
-    FurnizoriModule,
   ],
   controllers: [AppController],
   providers: [AppService],

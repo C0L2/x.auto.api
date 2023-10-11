@@ -21,7 +21,7 @@ export class Masini {
     @Column()
     km: number;
 
-    @ManyToOne(() => Client, (clientId) => clientId.client_id, { onDelete: 'CASCADE' })
+    /* @ManyToOne(() => Client, (clientId) => clientId.client_id, { onDelete: 'CASCADE' })
     @JoinColumn({ name: "client_id" })
-    clientId: Client
+    clientId: Client */
 }

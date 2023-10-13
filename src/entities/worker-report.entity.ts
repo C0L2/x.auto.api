@@ -25,7 +25,7 @@ export class WorkerReport {
     @JoinColumn({ name: "worker_id" })
     worker: Worker;
 
-    @OneToOne(() => Masini, (car) => car.work_report, { onDelete: 'CASCADE' })
+    @OneToOne(() => Masini)
     @JoinColumn({ name: "car_id" })
-    car: Masini;
+    masina: Masini
 }

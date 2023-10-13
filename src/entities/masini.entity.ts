@@ -29,7 +29,6 @@ export class Masini {
     @JoinColumn({ name: "client_id" })
     client: Client
 
-    @OneToOne(() => WorkerReport, (workerRole) => workerRole.car, { onDelete: 'CASCADE' })
-    @JoinColumn({ name: "car_id" })
-    work_report: WorkerReport;
+    @OneToOne(() => WorkerReport, (work_report) => work_report.masina)
+    raport: WorkerReport;
 }

@@ -1,4 +1,4 @@
-import { IsNumber } from 'class-validator';
+import { IsDateString, IsNumber } from 'class-validator';
 
 export class CreateWorkerReportDto {
     @IsNumber()
@@ -9,4 +9,7 @@ export class CreateWorkerReportDto {
 
     @IsNumber()
     service_id: number;
+
+    @IsDateString()
+    date: string;
 }

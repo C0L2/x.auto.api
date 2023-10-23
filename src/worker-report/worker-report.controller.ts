@@ -48,12 +48,16 @@ export class WorkerReportController {
                 service_id: {
                     type: 'number',
                     example: '7'
+                },
+                date: {
+                    type: 'string',
+                    example: 'date-type'
                 }
             }
         }
     })
     async createWorkerReport(@Body() body: CreateWorkerReportDto) {
-        const worker_report = await this.wkService.create(body.worker_id, body.car_id, body.service_id);
+        const worker_report = await this.wkService.create(body.worker_id, body.car_id, body.service_id, body.date);
         return { message: 'Successfully added new worker-report in list', worker_report: body };
     }
 

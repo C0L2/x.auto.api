@@ -17,6 +17,9 @@ export class WorkerReport {
     @Column()
     service_id: number
 
+    @Column({ type: 'timestamp' })
+    date: Date;
+
     @OneToMany(() => Services, (services) => services.services_report, { onDelete: 'CASCADE' })
     @JoinColumn({ name: "service_id" })
     report_services: Services[];

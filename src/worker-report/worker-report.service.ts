@@ -10,11 +10,13 @@ export class WorkerReportService {
     async create(
         worker_id: number,
         car_id: number,
-        service_id: number) {
+        service_id: number,
+        date: string) {
         const report = this.repo.create({
             worker_id,
             car_id,
-            service_id
+            service_id,
+            date
         });
         return this.repo.save(report);
     }

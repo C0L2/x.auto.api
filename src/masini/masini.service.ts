@@ -14,14 +14,16 @@ export class MasiniService {
         registration_number: string,
         vin_code: string,
         culoare: string,
-        km: number) {
+        km: number,
+        year: number) {
         const car = this.repo.create({
             client_id,
             model,
             registration_number,
             vin_code,
             culoare,
-            km
+            km,
+            year
         });
         return this.repo.save(car);
     }

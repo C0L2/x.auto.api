@@ -18,4 +18,7 @@ export class CreateMasiniDto {
 
     @IsNumber()
     km: number;
+
+    @IsNumber()
+    year: number
 }

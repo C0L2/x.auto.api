@@ -39,6 +39,10 @@ export class MasiniController {
                 km: {
                     type: 'number',
                     example: '85000'
+                },
+                year: {
+                    type: 'number',
+                    example: '2001'
                 }
             }
         }
@@ -50,7 +54,8 @@ export class MasiniController {
             body.registration_number,
             body.vin_code,
             body.culoare,
-            body.km
+            body.km,
+            body.year
         );
         return { message: 'Successfully added new car', car: body };
     }

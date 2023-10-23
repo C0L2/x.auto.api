@@ -25,6 +25,9 @@ export class Masini {
     @Column()
     km: number;
 
+    @Column()
+    year: number
+
     @ManyToOne(() => Client, (client) => client.car, { onDelete: 'CASCADE' })
     @JoinColumn({ name: "client_id" })
     client: Client

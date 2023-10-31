@@ -28,8 +28,12 @@ export class MasiniService {
         return this.repo.save(car);
     }
 
-    async findCarByVinCode(vin_code: number) {
-        return await this.repo.findOne({ where: { vin_code } })
+    async findCarByVinCode(vin_code: string): Promise<Masini> {
+        const car = await this.repo.findOne({ where: { vin_code } })
+        if (!car) {
+            throw new Error('This car was not found');
+        }
+        return car
     }
 
     async getAll(): Promise<Masini[]> {

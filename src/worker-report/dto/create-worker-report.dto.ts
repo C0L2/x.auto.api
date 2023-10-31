@@ -1,15 +1,16 @@
-import { IsDateString, IsNumber } from 'class-validator';
+import { IsArray, IsInt, ArrayMinSize, IsDateString } from 'class-validator';
 
 export class CreateWorkerReportDto {
-    @IsNumber()
+    @IsInt()
     worker_id: number;
 
-    @IsNumber()
+    @IsInt()
     car_id: number;
-
-    @IsNumber()
-    service_id: number;
 
     @IsDateString()
     date: string;
+
+    @IsArray()
+    @ArrayMinSize(1)
+    service_ids: number[];
 }

@@ -2,28 +2,42 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { WorkerReport } from 'src/entities/worker-report.entity';
 import { Repository } from 'typeorm';
+import { CreateWorkerReportDto } from './dto/create-worker-report.dto';
+import { Services } from 'src/entities/services.entity';
 
 @Injectable()
 export class WorkerReportService {
     constructor(@InjectRepository(WorkerReport) private repo: Repository<WorkerReport>) { }
+    /* 
+        async createWorkerReport(workerReportDTO: CreateWorkerReportDto): Promise<WorkerReport> {
+            const workerReport = new WorkerReport();
+            workerReport.worker_id = workerReportDTO.worker_id;
+            workerReport.car_id = workerReportDTO.car_id;
+            workerReport.date = new Date(workerReportDTO.date);
+    
+            workerReport.services = workerReportDTO.service_ids.map((serviceId) => {
+                const service = new Services();
+                service.service_id = serviceId;
+                return service;
+            });
+    
+            return await this.repo.save(workerReport);
+        } */
 
-    async create(
-        worker_id: number,
-        car_id: number,
-        service_id: number,
-        date: string) {
-        const report = this.repo.create({
-            worker_id,
-            car_id,
-            service_id,
-            date
-        });
-        return this.repo.save(report);
+    async getWorkerReportByIdWithServices(reportId: number): Promise<WorkerReport> {
+        const report = await this.repo
+            .createQueryBuilder('workerReport')
+            .leftJoinAndSelect('workerReport.services', 'services')
+            .where('workerReport.report_id = :reportId', { reportId })
+            .getOne();
+
+        if (!report) {
+            throw Error('No data found')
+        }
+
+        return report
     }
 
-    async findReportById(report_id: number) {
-        return await this.repo.findOne({ where: { report_id } })
-    }
 
     async findReportByWorkerId(worker_id: number) {
         const report = await this.repo.findOne({ where: { worker_id } });

@@ -1,6 +1,6 @@
 import { Body, Param, Controller, Get, Post, Session, UseGuards, UseInterceptors } from '@nestjs/common';
 import { SerializeInterceptor } from 'src/interceptors/serialize.interceptor';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateClientDto } from './dto/create-client.dto';
 import { Client } from '../entities/client.entity';
 import { ClientService } from './client.service';
@@ -41,6 +41,20 @@ export class ClientController {
     }
 
     @Get('/all-clients')
+    @ApiResponse({
+        status: 200,
+        schema: {
+            items: {
+                type: 'object',
+                properties: {
+                    service_name: {
+                        type: 'string',
+                        example: 'reparatie'
+                    }
+                }
+            }
+        }
+    })
     async getAllClients(): Promise<Client[]> {
         return this.clientService.getAllClients();
     }

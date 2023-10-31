@@ -38,6 +38,21 @@ export class ProgramariController {
 
     // @UseGuards(AuthManagerGuard)
     @Post('between-dates')
+    @ApiBody({
+        schema: {
+            type: 'object',
+            properties: {
+                startDate: {
+                    type: 'string',
+                    example: '2016-09-18T17:34:02.666Z'
+                },
+                endDate: {
+                    type: 'Date',
+                    example: '2016-09-18T17:34:02.666Z'
+                }
+            }
+        }
+    })
     async getProgramariBetweenDates(
         @Body() body: GetProgramariBetweenDatesDto,
     ): Promise<Programari[]> {

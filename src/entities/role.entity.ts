@@ -13,7 +13,4 @@ export class Role {
   @OneToMany(() => Worker, (worker) => worker.workerRoles, { onDelete: 'CASCADE' })
   @JoinColumn({ name: "role_id" })
   worker: Worker[];
-
-  /*   @OneToMany(() => Client, (client) => client.clientRoles, { onDelete: 'CASCADE' })
-    client: Client[]; */
 }

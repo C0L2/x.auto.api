@@ -2,6 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn, OneToOne
 import { Services } from './services.entity';
 import { Masini } from './masini.entity';
 import { Worker } from './worker.entity';
+import { AssignedServices } from './assigned-services.entity';
 
 @Entity()
 export class WorkerReport {
@@ -14,15 +15,8 @@ export class WorkerReport {
     @Column()
     car_id: number;
 
-    @Column()
-    service_id: number
-
     @Column({ type: 'timestamp' })
     date: Date;
-
-    @OneToMany(() => Services, (services) => services.services_report, { onDelete: 'CASCADE' })
-    @JoinColumn({ name: "service_id" })
-    report_services: Services[];
 
     @ManyToOne(() => Worker, (worker) => worker.worker_report, { onDelete: 'CASCADE' })
     @JoinColumn({ name: "worker_id" })
@@ -31,4 +25,8 @@ export class WorkerReport {
     @OneToOne(() => Masini)
     @JoinColumn({ name: "car_id" })
     masina: Masini
+
+    @OneToMany(() => AssignedServices, (report) => report.servicesFromReport, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: "report_id" })
+    report: AssignedServices[]
 }

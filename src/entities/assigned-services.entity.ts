@@ -19,6 +19,9 @@ export class AssignedServices {
     @Column()
     service_id: number;
 
+    @Column({ nullable: true })
+    price: number
+
     @ManyToOne(() => Services, (assignedService) => assignedService.services, { onDelete: 'CASCADE' })
     @JoinColumn({ name: "service_id" })
     assignedService: Services

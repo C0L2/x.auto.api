@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Post, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post, ValidationPipe } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { WorkerReportService } from './worker-report.service';
 import { CreateWorkerReportDto } from './dto/create-worker-report.dto';
@@ -73,6 +73,14 @@ export class WorkerReportController {
     async getByReportId(@Param('report_id') report_id: number) {
         const workerReport = await this.wkService.getWorkerReportWithServices(report_id);
         return workerReport;
+    }
+
+    @Patch(':id/update-price')
+    async updatePriceForAssignedServices(
+        @Param('id') report_id: number,
+        @Body() updatePriceDto: { serviceIds: number[], price: number },
+    ) {
+        await this.wkService.updatePriceForAssignedServices(report_id, updatePriceDto.serviceIds, updatePriceDto.price);
     }
 
     @Delete('delete-worker-report/:report_id')

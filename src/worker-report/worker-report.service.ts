@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { WorkerReport } from 'src/entities/worker-report.entity';
-import { EntityManager, Repository, Transaction, TransactionManager } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 
 import { AssignedServices } from 'src/entities/assigned-services.entity';
 
@@ -77,6 +77,23 @@ export class WorkerReportService {
 
     async getAllReports(): Promise<WorkerReport[]> {
         return await this.repo.find();
+    }
+
+    async updatePriceForAssignedServices(report_id: number, serviceIds: number[], price: number): Promise<void> {
+        const report = await this.repo.findOne(report_id, {
+            relations: ['report'],
+        });
+
+        if (!report) {
+            throw new NotFoundException(`Worker report with id ${report_id} not found.`);
+        }
+
+        await this.repo
+            .createQueryBuilder()
+            .update(AssignedServices)
+            .set({ price: price })
+            .where("report_id = :report_id AND service_id IN (:serviceIds)", { report_id, serviceIds })
+            .execute();
     }
 
     async remove(report_id: number) {

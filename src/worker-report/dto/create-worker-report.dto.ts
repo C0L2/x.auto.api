@@ -8,7 +8,7 @@ export class CreateWorkerReportDto {
     car_id: number;
 
     @IsDateString()
-    date: string;
+    report_date: Date;
 
     @IsArray()
     @ArrayMinSize(1)

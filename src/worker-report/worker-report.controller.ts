@@ -2,8 +2,7 @@ import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Validati
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { WorkerReportService } from './worker-report.service';
 import { CreateWorkerReportDto } from './dto/create-worker-report.dto';
-import { WorkerReport } from 'src/entities/worker-report.entity';
-import { MasiniService } from 'src/masini/masini.service';
+import { EntityManager, getManager } from "typeorm"
 
 @ApiTags('Worker Report')
 @Controller('worker-report')
@@ -33,44 +32,54 @@ export class WorkerReportController {
 
 
 
-    /*  @Post('create-new-worker-report')
-     @ApiBody({
-         schema: {
-             type: 'object',
-             properties: {
-                 worker_id: {
-                     type: 'number',
-                     example: '7'
-                 },
-                 car_id: {
-                     type: 'number',
-                     example: '7'
-                 },
-                 service_id: {
-                     type: 'number',
-                     example: '7'
-                 },
-                 date: {
-                     type: 'string',
-                     example: 'date-type'
-                 }
-             }
-         }
-     })
-     async createWorkerReport(@Body() workerReportDTO: CreateWorkerReportDto) {
-         const createdWorkerReport = await this.wkService.createWorkerReport(workerReportDTO);
-         return createdWorkerReport;
-     } */
+    @Post('create-new-worker-report')
+    @ApiBody({
+        schema: {
+            type: 'object',
+            properties: {
+                worker_id: {
+                    type: 'number',
+                    example: '7'
+                },
+                car_id: {
+                    type: 'number',
+                    example: '7'
+                },
+                service_id: {
+                    type: 'number',
+                    example: '7'
+                },
+                date: {
+                    type: 'string',
+                    example: 'date-type'
+                }
+            }
+        }
+    })
+    async createWorkerReport(@Body() body: CreateWorkerReportDto) {
+        const entityManager = getManager();
+        const newReport = await this.wkService.createWorkerReportWithServices(
+            body.worker_id,
+            body.car_id,
+            body.report_date,
+            body.service_ids,
+            entityManager,
+        );
+
+        return newReport;
+    }
 
     @Get("get-by-report-id/:report_id")
     async getByReportId(@Param('report_id') report_id: number) {
-        const reportData = await this.wkService.getWorkerReportByIdWithServices(report_id)
-        return { reportData }
+        const workerReport = await this.wkService.getWorkerReportWithServices(report_id);
+        return workerReport;
     }
 
     @Delete('delete-worker-report/:report_id')
-    async removeWorkerReport(@Param('report_id') report_id: number) {
-        await this.wkService.remove(report_id);
-        return { message: `Successfully deleted worker-report with id of: ${report_id}` };
+    async deleteWorkerReportWithServices(@Param('report_id') report_id: number) {
+        await this.wkService.deleteWorkerReportWithServices(report_id);
+
+        return { message: `successfully deleted worker-report with id ${report_id}` }
     }
+
 }

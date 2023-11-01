@@ -1,5 +1,4 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn, OneToOne, ManyToOne } from 'typeorm';
-import { Services } from './services.entity';
 import { Masini } from './masini.entity';
 import { Worker } from './worker.entity';
 import { AssignedServices } from './assigned-services.entity';

@@ -14,10 +14,10 @@ export class AssignedServices {
     assigned_service_id: number;
 
     @Column()
-    report_id: string;
+    report_id: number;
 
     @Column()
-    service_id: string;
+    service_id: number;
 
     @ManyToOne(() => Services, (assignedService) => assignedService.services, { onDelete: 'CASCADE' })
     @JoinColumn({ name: "service_id" })

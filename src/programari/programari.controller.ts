@@ -29,7 +29,7 @@ export class ProgramariController {
         }
     })
     async createProgramare(@Body() body: CreateProgramareDto) {
-        const programare = await this.progService.create(
+        await this.progService.create(
             body.programare_name,
             body.registr_date
         );

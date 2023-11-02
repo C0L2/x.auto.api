@@ -4,6 +4,8 @@ import { WorkerReport } from 'src/entities/worker-report.entity';
 import { Between, EntityManager, Repository } from 'typeorm';
 
 import { AssignedServices } from 'src/entities/assigned-services.entity';
+import { Services } from 'src/entities/services.entity';
+import { ServicesService } from 'src/services/services.service';
 
 @Injectable()
 export class WorkerReportService {
@@ -62,6 +64,30 @@ export class WorkerReportService {
         }
 
         return report
+    }
+
+    async getWorkerReportsByCarId(carId: number): Promise<number[]> {
+        const reports = await this.repo
+            .createQueryBuilder('workerReport')
+            .leftJoinAndSelect('workerReport.report', 'assignedService')
+            .where('workerReport.car_id = :carId', { carId })
+            .getMany();
+
+        if (reports) {
+            const serviceIds: number[] = [];
+
+            for (const report of reports) {
+                for (const assignedService of report.report) {
+                    if (assignedService.service_id) {
+                        serviceIds.push(assignedService.service_id);
+                    }
+                }
+            }
+
+            return serviceIds;
+        }
+
+        return [];
     }
 
     async getWorkerReportsByDateRange(worker_id: number, startDate: Date, endDate: Date): Promise<WorkerReport[]> {

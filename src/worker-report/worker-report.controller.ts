@@ -94,6 +94,12 @@ export class WorkerReportController {
         return workerReports;
     }
 
+    @Get(`car's-report/:car_id`)
+    async getWorkerReportsByCarId(@Param('car_id') car_id: number) {
+        const assignedServices = await this.wkService.getWorkerReportsByCarId(car_id);
+        return assignedServices;
+    }
+
     @Patch(':id/update-price')
     async updatePriceForAssignedServices(
         @Param('id') report_id: number,

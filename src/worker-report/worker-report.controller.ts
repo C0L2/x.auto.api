@@ -75,6 +75,25 @@ export class WorkerReportController {
         return workerReport;
     }
 
+    @Get('worker/:worker_id')
+    async getWorkerReportsByWorkerId(@Param('worker_id') worker_id: number) {
+        const workerReports = await this.wkService.getWorkerReportsByWorkerId(worker_id);
+        return workerReports;
+    }
+
+    @Get('worker/:worker_id/date-range/:startDate/:endDate')
+    async getWorkerReportsByDateRange(
+        @Param('worker_id') worker_id: number,
+        @Param('startDate') startDate: string,
+        @Param('endDate') endDate: string,
+    ) {
+        const startDateObj = new Date(startDate);
+        const endDateObj = new Date(endDate);
+
+        const workerReports = await this.wkService.getWorkerReportsByDateRange(worker_id, startDateObj, endDateObj);
+        return workerReports;
+    }
+
     @Patch(':id/update-price')
     async updatePriceForAssignedServices(
         @Param('id') report_id: number,

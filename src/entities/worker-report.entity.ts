@@ -28,4 +28,7 @@ export class WorkerReport {
     @OneToMany(() => AssignedServices, (report) => report.servicesFromReport, { onDelete: 'CASCADE' })
     @JoinColumn({ name: "report_id" })
     report: AssignedServices[]
+
+    @OneToMany(() => AssignedServices, (assignedService) => assignedService.servicesFromReport)
+    reports: AssignedServices[];
 }

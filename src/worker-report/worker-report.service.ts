@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { WorkerReport } from 'src/entities/worker-report.entity';
-import { EntityManager, Repository } from 'typeorm';
+import { Between, EntityManager, Repository } from 'typeorm';
 
 import { AssignedServices } from 'src/entities/assigned-services.entity';
 
@@ -62,6 +62,23 @@ export class WorkerReportService {
         }
 
         return report
+    }
+
+    async getWorkerReportsByDateRange(worker_id: number, startDate: Date, endDate: Date): Promise<WorkerReport[]> {
+        return this.repo.find({
+            where: {
+                worker_id,
+                date: Between(startDate, endDate)
+            },
+            relations: ['reports'],
+        });
+    }
+
+    async getWorkerReportsByWorkerId(worker_id: number): Promise<WorkerReport[]> {
+        return this.repo.find({
+            where: { worker_id },
+            relations: ['reports']
+        });
     }
 
 

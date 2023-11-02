@@ -1,11 +1,10 @@
 const { MigrationInterface, QueryRunner } = require("typeorm");
 
-module.exports = class initialShema1698847939532 {
-    name = 'initialShema1698847939532'
+module.exports = class initialShema1698857062034 {
+    name = 'initialShema1698857062034'
 
     async up(queryRunner) {
         await queryRunner.query(`CREATE TABLE "services" ("service_id" SERIAL NOT NULL, "service_name" character varying NOT NULL, CONSTRAINT "PK_ef0531b9789b488593690ab8d5d" PRIMARY KEY ("service_id"))`);
-        await queryRunner.query(`CREATE INDEX "IDX_SERVICE_ID" ON "services" ("service_id") `);
         await queryRunner.query(`CREATE TABLE "client" ("client_id" SERIAL NOT NULL, "nume_client" character varying NOT NULL, "email" character varying NOT NULL, "numar_telefon" character varying NOT NULL, CONSTRAINT "PK_7510ce0a84bde51dbff978b4b49" PRIMARY KEY ("client_id"))`);
         await queryRunner.query(`CREATE TABLE "masini" ("car_id" SERIAL NOT NULL, "client_id" integer NOT NULL DEFAULT '0', "model" character varying NOT NULL, "registration_number" character varying NOT NULL, "vin_code" character varying NOT NULL, "culoare" character varying NOT NULL, "km" integer NOT NULL, "year" integer NOT NULL, CONSTRAINT "PK_0be5138be728c8878f54c84d2d1" PRIMARY KEY ("car_id"))`);
         await queryRunner.query(`CREATE TABLE "role" ("role_id" SERIAL NOT NULL, "role_name" character varying NOT NULL, CONSTRAINT "PK_df46160e6aa79943b83c81e496e" PRIMARY KEY ("role_id"))`);
@@ -37,7 +36,6 @@ module.exports = class initialShema1698847939532 {
         await queryRunner.query(`DROP TABLE "role"`);
         await queryRunner.query(`DROP TABLE "masini"`);
         await queryRunner.query(`DROP TABLE "client"`);
-        await queryRunner.query(`DROP INDEX "public"."IDX_SERVICE_ID"`);
         await queryRunner.query(`DROP TABLE "services"`);
     }
 }

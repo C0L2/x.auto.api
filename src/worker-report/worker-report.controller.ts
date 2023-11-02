@@ -78,9 +78,16 @@ export class WorkerReportController {
     @Patch(':id/update-price')
     async updatePriceForAssignedServices(
         @Param('id') report_id: number,
-        @Body() updatePriceDto: { serviceIds: number[], price: number },
+        @Body() updatePriceDto: { serviceIds: number[], price: number[] },
     ) {
-        await this.wkService.updatePriceForAssignedServices(report_id, updatePriceDto.serviceIds, updatePriceDto.price);
+        const updatedServices = await this.wkService.updatePriceForAssignedServices(report_id, updatePriceDto.serviceIds, updatePriceDto.price);
+
+        const response = {
+            message: 'Prices updated successfully',
+            updatedServices: updatedServices,
+        };
+
+        return response;
     }
 
     @Delete('delete-worker-report/:report_id')

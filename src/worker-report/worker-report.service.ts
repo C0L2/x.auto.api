@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { WorkerReport } from 'src/entities/worker-report.entity';
 import { EntityManager, Repository } from 'typeorm';
@@ -79,7 +79,7 @@ export class WorkerReportService {
         return await this.repo.find();
     }
 
-    async updatePriceForAssignedServices(report_id: number, serviceIds: number[], price: number): Promise<void> {
+    async updatePriceForAssignedServices(report_id: number, serviceIds: number[], prices: number[]): Promise<{ serviceId: number, price: number }[]> {
         const report = await this.repo.findOne(report_id, {
             relations: ['report'],
         });
@@ -88,13 +88,29 @@ export class WorkerReportService {
             throw new NotFoundException(`Worker report with id ${report_id} not found.`);
         }
 
-        await this.repo
-            .createQueryBuilder()
-            .update(AssignedServices)
-            .set({ price: price })
-            .where("report_id = :report_id AND service_id IN (:serviceIds)", { report_id, serviceIds })
-            .execute();
+        if (serviceIds.length !== prices.length) {
+            throw new BadRequestException('The number of serviceIds should match the number of prices.');
+        }
+
+        const updatedServices = [];
+
+        for (let i = 0; i < serviceIds.length; i++) {
+            const serviceId = serviceIds[i];
+            const price = prices[i];
+
+            await this.repo
+                .createQueryBuilder()
+                .update(AssignedServices)
+                .set({ price: price })
+                .where("report_id = :report_id AND service_id = :serviceId", { report_id, serviceId })
+                .execute();
+
+            updatedServices.push({ serviceId, price });
+        }
+
+        return updatedServices;
     }
+
 
     async remove(report_id: number) {
         const report = await this.repo.findOne({ where: { report_id } });

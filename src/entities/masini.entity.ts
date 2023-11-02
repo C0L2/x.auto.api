@@ -32,6 +32,7 @@ export class Masini {
     @JoinColumn({ name: "client_id" })
     client: Client
 
-    @OneToOne(() => WorkerReport, (work_report) => work_report.masina)
-    raport: WorkerReport;
+    @OneToMany(() => WorkerReport, (work_report) => work_report.masina)
+    @JoinColumn({ name: "car_id" })
+    work_report: WorkerReport;
 }

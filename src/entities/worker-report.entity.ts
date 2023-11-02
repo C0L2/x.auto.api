@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn, OneToOne, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn, OneToOne, ManyToOne, ManyToMany } from 'typeorm';
 import { Masini } from './masini.entity';
 import { Worker } from './worker.entity';
 import { AssignedServices } from './assigned-services.entity';
@@ -21,7 +21,7 @@ export class WorkerReport {
     @JoinColumn({ name: "worker_id" })
     worker: Worker;
 
-    @OneToOne(() => Masini)
+    @ManyToOne(() => Masini, (masina) => masina.work_report, { onDelete: 'CASCADE' })
     @JoinColumn({ name: "car_id" })
     masina: Masini
 

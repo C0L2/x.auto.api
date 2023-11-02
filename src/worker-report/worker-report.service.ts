@@ -66,28 +66,13 @@ export class WorkerReportService {
         return report
     }
 
-    async getWorkerReportsByCarId(carId: number): Promise<number[]> {
-        const reports = await this.repo
-            .createQueryBuilder('workerReport')
-            .leftJoinAndSelect('workerReport.report', 'assignedService')
-            .where('workerReport.car_id = :carId', { carId })
-            .getMany();
-
-        if (reports) {
-            const serviceIds: number[] = [];
-
-            for (const report of reports) {
-                for (const assignedService of report.report) {
-                    if (assignedService.service_id) {
-                        serviceIds.push(assignedService.service_id);
-                    }
-                }
-            }
-
-            return serviceIds;
-        }
-
-        return [];
+    async getWorkerReportsDateAndServiceIdByCarId(carId: number): Promise<any[]> {
+        return this.repo.createQueryBuilder('wr')
+            .select('wr.date', 'date')
+            .addSelect('as.service_id', 'service_id')
+            .innerJoin('wr.report', 'as')
+            .where('wr.car_id = :carId', { carId })
+            .getRawMany();
     }
 
     async getWorkerReportsByDateRange(worker_id: number, startDate: Date, endDate: Date): Promise<WorkerReport[]> {

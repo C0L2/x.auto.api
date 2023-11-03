@@ -10,11 +10,4 @@ import { Worker } from 'src/entities/worker.entity';
   providers: [RoleService],
   controllers: [RoleController],
 })
-export class RoleModule implements OnModuleInit {
-
-  constructor(private roleService: RoleService) { }
-
-  async onModuleInit() {
-    await this.roleService.seed();
-  }
-}
+export class RoleModule { }

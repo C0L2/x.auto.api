@@ -2,12 +2,12 @@ import { Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post, V
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { WorkerReportService } from './worker-report.service';
 import { CreateWorkerReportDto } from './dto/create-worker-report.dto';
-import { EntityManager, getManager } from "typeorm"
+import { getManager } from "typeorm"
 
 @ApiTags('Worker Report')
 @Controller('worker-report')
 export class WorkerReportController {
-    constructor(private wkService: WorkerReportService/* , private masiniService: MasiniService */) { }
+    constructor(private wkService: WorkerReportService) { }
 
     @Post(`get-specific's-worker-report/:worker_id`)
     @ApiBody({

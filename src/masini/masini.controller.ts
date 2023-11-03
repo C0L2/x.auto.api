@@ -66,6 +66,11 @@ export class MasiniController {
         return this.carService.getAll();
     }
 
+    @Get('find-car-by-vincode/:vin_code')
+    async findCar(@Param('vin_code') vin_code: string) {
+        return this.carService.findCarByVinCode(vin_code)
+    }
+
     // @UseGuards(AuthManagerGuard)
     @Delete('delete-car/:id')
     async removeRole(@Param('id') id: number) {

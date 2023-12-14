@@ -37,5 +37,5 @@ lerna-debug.log*
 
 #config files:
 /database-query.txt
-/config
-/ormconfig
+/config.ts
+/ormconfig.ts

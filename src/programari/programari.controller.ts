@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, NotFoundException, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { CreateProgramareDto } from './dto/create-programare.dto';
 import { ProgramariService } from './programari.service';
@@ -64,8 +64,12 @@ export class ProgramariController {
 
     // @UseGuards(AuthManagerGuard)
     @Get('programari-for-today')
-    async getProgramariForToday(): Promise<Programari[]> {
-        return this.progService.getProgramariForToday();
+    async getProgramariForToday(): Promise<Programari[] | null> {
+        const programari = await this.progService.getProgramariForToday();
+        if (programari.length === 0) {
+            throw new NotFoundException('Nu există înregistrări pentru programările de astăzi.');
+        }
+        return programari
     }
 
     // @UseGuards(AuthManagerGuard)

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Programari } from '../entities/programari.entity';
-import { Between, Repository } from 'typeorm';
+import { Between, MoreThanOrEqual, Repository } from 'typeorm';
 import { startOfDay, endOfDay } from 'date-fns';
 
 @Injectable()
@@ -44,13 +44,15 @@ export class ProgramariService {
 
     async getProgramariForToday(): Promise<Programari[]> {
         const currentDate = new Date();
-        const startDate = startOfDay(currentDate); // Ora 00:00:00 a zilei curente
-        const endDate = endOfDay(currentDate);     // Ora 23:59:59 a zilei curente
+        const startDate = startOfDay(currentDate);
+        const endDate = endOfDay(currentDate);
 
-        return this.repo.find({
+        const programari = await this.repo.find({
             where: {
                 registr_date: Between(startDate, endDate),
             },
         });
+        return programari;
     }
+
 }

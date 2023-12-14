@@ -6,7 +6,7 @@ import * as session from 'express-session';
 import * as dotenv from 'dotenv';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-dotenv.config();
+dotenv.config({ path: `.env.${process.env.NODE_ENV || 'dev'}` });
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
@@ -32,7 +32,7 @@ async function bootstrap() {
     .build()
 
   const swagger_document = SwaggerModule.createDocument(app, config)
-  SwaggerModule.setup('api-documentation', app, swagger_document)
+  SwaggerModule.setup('docs', app, swagger_document)
   await app.listen(process.env.PORT || 9800);
 }
 bootstrap();

@@ -36,6 +36,6 @@ lerna-debug.log*
 !.vscode/extensions.json
 
 #config files:
-database-query.txt
-config
-ormconfig
+/database-query.txt
+/config
+/ormconfig

@@ -34,6 +34,5 @@ async function bootstrap() {
   const swagger_document = SwaggerModule.createDocument(app, config)
   SwaggerModule.setup('docs', app, swagger_document)
   await app.listen(process.env.PORT || 9800);
-  console.log('new commit')
 }
 bootstrap();

@@ -32,8 +32,8 @@ export class ClientController {
         }
     })
     async createClient(@Body() body: CreateClientDto) {
-        const programare = await this.clientService.create(
-            body.numar_telefon,
+        await this.clientService.create(
+            body.nume_client,
             body.email,
             body.numar_telefon,
         );

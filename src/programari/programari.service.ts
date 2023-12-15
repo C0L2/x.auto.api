@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Programari } from '../entities/programari.entity';
 import { Between, MoreThanOrEqual, Repository } from 'typeorm';
-import { startOfDay, endOfDay } from 'date-fns';
+import { startOfDay, endOfDay, addDays } from 'date-fns';
 
 @Injectable()
 export class ProgramariService {
@@ -18,20 +18,17 @@ export class ProgramariService {
         return this.repo.save(programare);
     }
 
-    async findProgramareById(programare_id: number) {
-        return await this.repo.findOne({ where: { programare_id } })
-    }
-
-    async findProgramareByClientId(client_id: number) {
-        return await this.repo.find({ where: { client_id } })
+    async getAllProgramari() {
+        return await this.repo.find()
     }
 
     async remove(programare_id: number) {
         const programare = await this.repo.findOne({ where: { programare_id } });
         if (!programare) {
-            throw new Error('This programare was not found');
+            throw new NotFoundException('This appointment was not found');
         }
-        return this.repo.remove(programare);
+        await this.repo.remove(programare)
+        return { message: 'Appointment deleted successfully' }
     }
 
     async getProgramariBetweenDates(startDate: string, endDate: string): Promise<Programari[]> {
@@ -43,16 +40,26 @@ export class ProgramariService {
     }
 
     async getProgramariForToday(): Promise<Programari[]> {
-        const currentDate = new Date();
-        const startDate = startOfDay(currentDate);
-        const endDate = endOfDay(currentDate);
+        const startDate = startOfDay(new Date());
+        const endDate = endOfDay(new Date());
 
-        const programari = await this.repo.find({
+        return await this.repo.find({
             where: {
                 registr_date: Between(startDate, endDate),
             },
         });
-        return programari;
+    }
+
+    async getProgramariForTomorrow(): Promise<Programari[]> {
+        const tomorrow = addDays(new Date(), 1);
+        const startDate = startOfDay(tomorrow);
+        const endDate = endOfDay(tomorrow);
+
+        return await this.repo.find({
+            where: {
+                registr_date: Between(startDate, endDate),
+            },
+        });
     }
 
 }

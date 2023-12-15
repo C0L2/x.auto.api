@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Programari } from '../entities/programari.entity';
 import { Between, MoreThanOrEqual, Repository } from 'typeorm';
-import { startOfDay, endOfDay } from 'date-fns';
+import { startOfDay, endOfDay, addDays } from 'date-fns';
 
 @Injectable()
 export class ProgramariService {
@@ -27,6 +27,7 @@ export class ProgramariService {
         if (!programare) {
             throw new NotFoundException('This appointment was not found');
         }
+        await this.repo.remove(programare)
         return { message: 'Appointment deleted successfully' }
     }
 
@@ -41,6 +42,18 @@ export class ProgramariService {
     async getProgramariForToday(): Promise<Programari[]> {
         const startDate = startOfDay(new Date());
         const endDate = endOfDay(new Date());
+
+        return await this.repo.find({
+            where: {
+                registr_date: Between(startDate, endDate),
+            },
+        });
+    }
+
+    async getProgramariForTomorrow(): Promise<Programari[]> {
+        const tomorrow = addDays(new Date(), 1);
+        const startDate = startOfDay(tomorrow);
+        const endDate = endOfDay(tomorrow);
 
         return await this.repo.find({
             where: {

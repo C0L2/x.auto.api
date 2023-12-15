@@ -5,10 +5,12 @@ import {
     ManyToOne,
     JoinColumn,
     OneToMany,
+    Unique,
 } from 'typeorm';
 import { Masini } from './masini.entity';
 
 @Entity()
+@Unique(['email', 'numar_telefon'])
 export class Client {
     @PrimaryGeneratedColumn()
     client_id: number;

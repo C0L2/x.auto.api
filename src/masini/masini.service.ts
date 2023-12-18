@@ -26,6 +26,25 @@ export class MasiniService {
         return await this.repo.save(car);
     }
 
+    async updateMasinaWithClientId(vin_code: string, clientId: number): Promise<Masini | undefined> {
+        const [existingCar, client] = await Promise.all([
+            this.findCarByVinCode(vin_code),
+            this.clientService.findById(clientId),
+        ]);
+
+        if (!existingCar) {
+            throw new ConflictException(`Car not found`);
+        }
+
+        if (!client) {
+            throw new ConflictException(`Client with ID ${clientId} not found`);
+        }
+
+        existingCar.client_id = clientId;
+
+        return this.repo.save(existingCar);
+    }
+
     async findCarByVinCode(vin_code: string): Promise<Masini> {
         const car = await this.repo.findOne({ where: { vin_code } })
         if (!car) {

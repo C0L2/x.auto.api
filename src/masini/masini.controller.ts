@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { MasiniService } from './masini.service';
 import { AuthManagerGuard } from 'src/guards/auth-manager.guard';
@@ -68,5 +68,13 @@ export class MasiniController {
     async removeRole(@Param('id') id: number) {
         await this.carService.remove(id);
         return { message: `Successfully deleted car with id of: ${id}` };
+    }
+
+    @Put(':vin_code/assign-client')
+    async updateMasinaWithClientId(
+        @Param('vin_code') vin_code: string,
+        @Body('client_id') clientId: number,
+    ) {
+        return this.carService.updateMasinaWithClientId(vin_code, clientId);
     }
 }

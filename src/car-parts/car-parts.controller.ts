@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseInterceptors } from '@nestjs/common';
 import { CarPartsService } from './car-parts.service';
 import { SerializeInterceptor } from 'src/interceptors/serialize.interceptor';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
@@ -11,32 +11,36 @@ export class CarPartsController {
 
     constructor(private carPartService: CarPartsService) { }
 
-    @Post('/add-ccar-part')
+    @Post('/add-new')
     @UseInterceptors(SerializeInterceptor)
-    @ApiBody({
-        schema: {
-            type: 'object',
-            properties: {
-                car_part_name: {
-                    type: 'string',
-                    example: 'motor'
-                }
-            }
-        }
-    })
     async createCarPart(@Body() body: CreateCarPart) {
-        const programare = await this.carPartService.create(body.car_part_name);
-
-        return { message: 'Successfully added new client', programare: body };
+        await this.carPartService.create(body.car_part_name);
+        return { message: 'Successfully added new car-part', car_part: body };
     }
 
-    @Get('/all-car_parts')
+    @Get('/get-all')
     async getAllCarParts(): Promise<CarParts[]> {
         return this.carPartService.getAllCarParts();
     }
 
-    @Get('/find-car-parts/:car_part_id')
-    async fincClient(@Param('car_part_id') car_part_id: number): Promise<CarParts | undefined> {
-        return this.carPartService.findById(car_part_id);
+    @Get('/find/:car_part_name')
+    async findClient(@Param('car_part_name') car_part_name: string) {
+        return this.carPartService.findByName(car_part_name);
+    }
+
+    @Delete('/delete/:id')
+    async deleteCarPart(@Param('id') id: number) {
+        const car_part = await this.carPartService.remove(id)
+        return { message: 'Successfully deleted car-part', car_part };
+    }
+
+    @Patch('/update/:id')
+    async update(@Param('id') id: number, @Body() attrs: Partial<CarParts>) {
+        try {
+            const updatedCarPart = await this.carPartService.update(id, attrs);
+            return { message: 'Sucessfully updated car-part', data: updatedCarPart };
+        } catch (error) {
+            return { message: error.message };
+        }
     }
 }

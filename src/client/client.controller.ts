@@ -1,6 +1,6 @@
-import { Body, Param, Controller, Get, Post, Session, UseGuards, UseInterceptors, HttpStatus, Delete, Patch } from '@nestjs/common';
+import { Body, Param, Controller, Get, Post, UseInterceptors, HttpStatus, Delete, Patch } from '@nestjs/common';
 import { SerializeInterceptor } from 'src/interceptors/serialize.interceptor';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateClientDto } from './dto/create-client.dto';
 import { ClientService } from './client.service';
 import { Client } from 'src/entities/client.entity';

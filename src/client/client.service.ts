@@ -34,7 +34,7 @@ export class ClientService {
         return await this.repo.save(client);
     }
 
-    async update(client_id: number, attrs: Partial<Client>) {
+    async update(client_id: number, attrs: Partial<Client>): Promise<Client> {
         const client = await this.findById(client_id);
         if (!client) {
             throw new ConflictException('Client not found');

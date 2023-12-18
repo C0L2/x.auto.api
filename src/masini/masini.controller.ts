@@ -6,12 +6,12 @@ import { CreateMasiniDto } from './dto/create-masini.dto';
 import { Masini } from '../entities/masini.entity';
 
 @ApiTags('Masini')
-@Controller('masini')
+@Controller('cars')
 export class MasiniController {
     constructor(private carService: MasiniService) { }
 
     // @UseGuards(AuthManagerGuard)
-    @Post('add-new-one')
+    @Post('add-new')
     @ApiBody({
         schema: {
             type: 'object',
@@ -48,31 +48,23 @@ export class MasiniController {
         }
     })
     async createCar(@Body() body: CreateMasiniDto) {
-        const car = await this.carService.create(
-            body.client_id,
-            body.model,
-            body.registration_number,
-            body.vin_code,
-            body.culoare,
-            body.km,
-            body.year
-        );
+        const car = await this.carService.create(body);
         return { message: 'Successfully added new car', car: body };
     }
 
     // @UseGuards(AuthManagerGuard)
-    @Get('all-cars')
+    @Get('all')
     async getAllRoutes(): Promise<Masini[]> {
         return this.carService.getAll();
     }
 
-    @Get('find-car-by-vincode/:vin_code')
+    @Get('find-by-vincode/:vin_code')
     async findCar(@Param('vin_code') vin_code: string) {
         return this.carService.findCarByVinCode(vin_code)
     }
 
     // @UseGuards(AuthManagerGuard)
-    @Delete('delete-car/:id')
+    @Delete('delete/:id')
     async removeRole(@Param('id') id: number) {
         await this.carService.remove(id);
         return { message: `Successfully deleted car with id of: ${id}` };

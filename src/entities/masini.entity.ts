@@ -1,13 +1,14 @@
 import { Client } from 'src/entities/client.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany, OneToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany, OneToOne, Unique } from 'typeorm';
 import { WorkerReport } from './worker-report.entity';
 
 @Entity()
+@Unique(['vin_code'])
 export class Masini {
     @PrimaryGeneratedColumn()
     car_id: number;
 
-    @Column({ type: 'integer', default: 0 })
+    @Column({ type: 'integer', nullable: true, default: null })
     client_id: number;
 
     @Column()

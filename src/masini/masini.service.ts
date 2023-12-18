@@ -1,37 +1,35 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Masini } from '../entities/masini.entity';
 import { Repository } from 'typeorm';
+import { ClientService } from 'src/client/client.service';
+import { CreateMasiniDto } from './dto/create-masini.dto';
 
 @Injectable()
 export class MasiniService {
-
-    constructor(@InjectRepository(Masini) private repo: Repository<Masini>) { }
+    constructor(@InjectRepository(Masini) private repo: Repository<Masini>, private clientService: ClientService) { }
 
     async create(
-        client_id: number,
-        model: string,
-        registration_number: string,
-        vin_code: string,
-        culoare: string,
-        km: number,
-        year: number) {
-        const car = this.repo.create({
-            client_id,
-            model,
-            registration_number,
-            vin_code,
-            culoare,
-            km,
-            year
-        });
-        return this.repo.save(car);
+        body: CreateMasiniDto) {
+        if (body.client_id) {
+            const client = await this.clientService.findById(body.client_id);
+            if (!client) {
+                throw new ConflictException('This client was not found in database')
+            }
+        }
+
+        const existingCar = await this.repo.findOne({ where: { vin_code: body.vin_code } });
+        if (existingCar) throw new ConflictException("Car with this vin code already exists");
+
+        const car = await this.repo.create(body);
+
+        return await this.repo.save(car);
     }
 
     async findCarByVinCode(vin_code: string): Promise<Masini> {
         const car = await this.repo.findOne({ where: { vin_code } })
         if (!car) {
-            throw new Error('This car was not found');
+            throw new ConflictException('This car was not found');
         }
         return car
     }
@@ -43,7 +41,7 @@ export class MasiniService {
     async remove(car_id: number) {
         const car = await this.repo.findOne({ where: { car_id } });
         if (!car) {
-            throw new Error('This car was not found');
+            throw new ConflictException('This car was not found');
         }
         return this.repo.remove(car);
     }

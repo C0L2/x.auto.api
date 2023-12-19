@@ -8,17 +8,23 @@ import {
   UseGuards,
   Session,
   UseInterceptors,
+  Put,
+  Param,
+  NotFoundException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoignWorkerDto } from './dto/login-worker.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { RoleService } from 'src/role/role.service';
+import { WorkerService } from './worker.service';
+import { session } from 'src/types';
 
 @ApiTags('Authentification/Authorization')
 @Controller('worker')
 export class WorkerController {
   constructor(private authService: AuthService,
+    private workerService: WorkerService,
     private roleService: RoleService) { }
 
   @Post('/register')
@@ -99,13 +105,17 @@ export class WorkerController {
 
   @Get('/protected')
   @UseGuards(AuthGuard)
-  getProtectedRoute(@Session() session: any) {
+  getProtectedRoute(@Session() session: session) {
     if (session.worker) {
-      const workerData = session.worker;
-      console.log(session.worker)
+      console.log(session)
       return { message: 'Welcome to the protected route!' };
     } else {
       return { message: 'Unauthorized' };
     }
+  }
+
+  @Get('all')
+  async allUsers() {
+    return await this.workerService.getAllWorkers()
   }
 }

@@ -55,7 +55,6 @@ export class AuthService {
     const hash = (await scrypt(password, salt, 32)) as Buffer;
     const result = salt + '.' + hash.toString('hex');
 
-    // Utilizați obiectul Role în crearea workerului
     const worker = await this.workersService.create(
       worker_name,
       worker_surname,

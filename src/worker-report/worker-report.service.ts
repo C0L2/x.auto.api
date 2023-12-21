@@ -1,13 +1,16 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { WorkerReport } from 'src/entities/worker-report.entity';
 import { Between, EntityManager, Repository } from 'typeorm';
 import { AssignedServices } from 'src/entities/assigned-services.entity';
+import { MechanicReport, Report } from 'src/types';
+import { WorkerService } from 'src/worker/worker.service';
 
 @Injectable()
 export class WorkerReportService {
     constructor(@InjectRepository(WorkerReport) private repo: Repository<WorkerReport>,
-        @InjectRepository(AssignedServices) private assignedRepo: Repository<AssignedServices>) { }
+        @InjectRepository(AssignedServices) private assignedRepo: Repository<AssignedServices>,
+        private workerServis: WorkerService) { }
 
     async createWorkerReportWithServices(
         worker_id: number,
@@ -37,16 +40,33 @@ export class WorkerReportService {
         });
     }
 
-    async getWorkerReportWithServices(report_id: number): Promise<WorkerReport | undefined> {
+    async getWorkerReportWithServices(report_id: number) {
         const workerReport = await this.repo.findOne(report_id, {
-            relations: ['report'],
+            relations: ['report', 'report.assignedService'],
         });
 
         if (!workerReport) {
             throw new NotFoundException(`Worker report with id ${report_id} not found.`);
         }
 
-        return workerReport
+        const worker = await this.workerServis.findById(workerReport.worker_id);
+
+        const mapReport = (item: Report) => ({
+            report_id: item.report_id,
+            price: item.price,
+            assignedService: {
+                service_id: item.assignedService.service_id,
+                service_name: item.assignedService.service_name,
+            },
+        });
+
+        const invoice = {
+            report_id: workerReport.report_id,
+            worker_full_name: `${worker?.worker_name} ${worker?.worker_surname}`,
+            reports: workerReport.report.map(mapReport),
+        };
+
+        return invoice;
     }
 
     async getWorkerReportByIdWithServices(reportId: number): Promise<WorkerReport> {
@@ -82,12 +102,30 @@ export class WorkerReportService {
         });
     }
 
-    async getWorkerReportsByWorkerId(worker_id: number): Promise<WorkerReport[]> {
-        return this.repo.find({
+    async getWorkerReportsByWorkerId(worker_id: number): Promise<MechanicReport[]> {
+        const workerReports = await this.repo.find({
             where: { worker_id },
-            relations: ['reports']
+            relations: ['reports', 'reports.assignedService'],
         });
+
+        const adjustedReports: MechanicReport[] = workerReports.map((report) => ({
+            report_id: report.report_id,
+            worker_id: report.worker_id,
+            car_id: report.car_id,
+            date: report.date,
+            reports: report.reports.map((assignedService) => ({
+                assigned_service_id: assignedService.assigned_service_id,
+                price: assignedService.price,
+                assignedService: {
+                    service_id: assignedService.assignedService.service_id,
+                    service_name: assignedService.assignedService.service_name,
+                },
+            })),
+        }));
+
+        return adjustedReports;
     }
+
 
 
     async findReportByWorkerId(worker_id: number) {

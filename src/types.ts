@@ -22,3 +22,23 @@ export type session = {
     },
     jwt_token: string
 }
+
+export type MechanicReport = {
+    report_id: number,
+    worker_id: number,
+    car_id: number,
+    date: Date,
+    reports: Report[]
+}
+
+export type Report = {
+    report_id?: number,
+    assignedService: assignedService,
+    assigned_service_id: number,
+    price: number | null,
+}
+
+type assignedService = {
+    service_id: number,
+    service_name: string
+}

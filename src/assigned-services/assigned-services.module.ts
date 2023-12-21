@@ -5,9 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AssignedServices } from 'src/entities/assigned-services.entity';
 import { WorkerReport } from 'src/entities/worker-report.entity';
 import { WorkerReportService } from 'src/worker-report/worker-report.service';
+import { WorkerModule } from 'src/worker/workers.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([AssignedServices, WorkerReport])],
+  imports: [TypeOrmModule.forFeature([AssignedServices, WorkerReport]), WorkerModule],
   providers: [AssignedServicesService, WorkerReportService],
   controllers: [AssignedServicesController]
 })

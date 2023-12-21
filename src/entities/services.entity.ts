@@ -1,5 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, Index, OneToMany, JoinColumn, ManyToMany } from 'typeorm';
-import { WorkerReport } from './worker-report.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn } from 'typeorm';
 import { AssignedServices } from './assigned-services.entity';
 
 @Entity()

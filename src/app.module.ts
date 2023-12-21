@@ -15,7 +15,7 @@ import { MasiniModule } from './masini/masini.module';
 import { CarPartsModule } from './car-parts/car-parts.module';
 import { WorkerReportModule } from './worker-report/worker-report.module';
 import { AssignedServicesModule } from './assigned-services/assigned-services.module';
-
+import { AssignedCarPartsModule } from './assigned-carparts/assigned-carparts.module';
 
 import * as dotenv from 'dotenv';
 dotenv.config();
@@ -42,6 +42,7 @@ dotenv.config();
     CarPartsModule,
     WorkerReportModule,
     AssignedServicesModule,
+    AssignedCarPartsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -8,10 +8,10 @@ import { WorkerService } from 'src/worker/worker.service';
 import { Worker } from 'src/entities/worker.entity';
 import { WorkerModule } from 'src/worker/workers.module';
 import { AssignedServicesService } from 'src/assigned-services/assigned-services.service';
-import { AssignedServicesModule } from 'src/assigned-services/assigned-services.module';
+import { AssignedCarParts } from 'src/entities/assigned-car-parts.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([WorkerReport, AssignedServices, Worker]), WorkerModule],
+  imports: [TypeOrmModule.forFeature([WorkerReport, AssignedServices, AssignedCarParts, Worker]), WorkerModule],
   controllers: [WorkerReportController],
   providers: [WorkerReportService]
 })

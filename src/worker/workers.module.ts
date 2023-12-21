@@ -1,4 +1,4 @@
-import { Module, forwardRef } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { WorkerController } from './worker.controller';
 import { WorkerService } from './worker.service';
 import { Worker } from '../entities/worker.entity';
@@ -12,11 +12,6 @@ import { Role } from 'src/entities/role.entity';
 import { RoleService } from 'src/role/role.service';
 
 import * as dotenv from 'dotenv';
-import { WorkerReport } from 'src/entities/worker-report.entity';
-import { WorkerReportModule } from 'src/worker-report/worker-report.module';
-import { AssignedServices } from 'src/entities/assigned-services.entity';
-import { AssignedServicesService } from 'src/assigned-services/assigned-services.service';
-import { AssignedServicesModule } from 'src/assigned-services/assigned-services.module';
 dotenv.config();
 
 @Module({

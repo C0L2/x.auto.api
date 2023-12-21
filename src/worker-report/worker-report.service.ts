@@ -3,13 +3,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { WorkerReport } from 'src/entities/worker-report.entity';
 import { Between, EntityManager, Repository } from 'typeorm';
 import { AssignedServices } from 'src/entities/assigned-services.entity';
-import { MechanicReport, Report } from 'src/types';
+import { CarPart, MechanicReport, Report } from 'src/types';
 import { WorkerService } from 'src/worker/worker.service';
+import { AssignedCarParts } from 'src/entities/assigned-car-parts.entity';
 
 @Injectable()
 export class WorkerReportService {
     constructor(@InjectRepository(WorkerReport) private repo: Repository<WorkerReport>,
         @InjectRepository(AssignedServices) private assignedRepo: Repository<AssignedServices>,
+        @InjectRepository(AssignedCarParts) private assignedcarPartRepo: Repository<AssignedCarParts>,
         private workerServis: WorkerService) { }
 
     async createWorkerReportWithServices(
@@ -17,6 +19,7 @@ export class WorkerReportService {
         car_id: number,
         date: Date,
         serviceIds: number[],
+        carpartIds: number[],
         entityManager: EntityManager,
     ) {
         return await entityManager.transaction(async transactionalEntityManager => {
@@ -34,7 +37,15 @@ export class WorkerReportService {
                 return assignedService;
             });
 
+            const assignedCarParts = carpartIds.map(carpartId => {
+                const assignedCarPart = new AssignedCarParts();
+                assignedCarPart.report_id = createdReport.report_id;
+                assignedCarPart.car_part_id = carpartId;
+                return assignedCarPart;
+            });
+
             await transactionalEntityManager.save(AssignedServices, assignedServices);
+            await transactionalEntityManager.save(AssignedCarParts, assignedCarParts);
 
             return createdReport;
         });
@@ -42,8 +53,9 @@ export class WorkerReportService {
 
     async getWorkerReportWithServices(report_id: number) {
         const workerReport = await this.repo.findOne(report_id, {
-            relations: ['report', 'report.assignedService'],
+            relations: ['report', 'report.assignedService', 'carpart', 'carpart.assignedCarParts'],
         });
+        console.log(workerReport)
 
         if (!workerReport) {
             throw new NotFoundException(`Worker report with id ${report_id} not found.`);
@@ -60,10 +72,20 @@ export class WorkerReportService {
             },
         });
 
+        const mapPart = (item: CarPart) => ({
+            report_id: item.report_id,
+            price: item.price,
+            assignedCarPart: {
+                car_part_id: item.assignedCarParts.car_part_id,
+                car_part_name: item.assignedCarParts.car_part_name,
+            },
+        })
+
         const invoice = {
             report_id: workerReport.report_id,
             worker_full_name: `${worker?.worker_name} ${worker?.worker_surname}`,
-            reports: workerReport.report.map(mapReport),
+            services: workerReport.report.map(mapReport),
+            car_parts: workerReport.carpart.map(mapPart)
         };
 
         return invoice;

@@ -38,7 +38,19 @@ export type Report = {
     price: number | null,
 }
 
+
+export type CarPart = {
+    report_id?: number,
+    assignedCarParts: assignedCarParts,
+    price: number | null
+}
+
 type assignedService = {
     service_id: number,
     service_name: string
+}
+
+type assignedCarParts = {
+    car_part_id: number,
+    car_part_name: string
 }

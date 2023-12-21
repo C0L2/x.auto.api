@@ -63,6 +63,7 @@ export class WorkerReportController {
             body.car_id,
             body.report_date,
             body.service_ids,
+            body.carparts_ids,
             entityManager,
         );
 

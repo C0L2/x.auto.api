@@ -2,6 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn, OneToOne
 import { Masini } from './masini.entity';
 import { Worker } from './worker.entity';
 import { AssignedServices } from './assigned-services.entity';
+import { AssignedCarParts } from './assigned-car-parts.entity';
 
 @Entity()
 export class WorkerReport {
@@ -29,6 +30,13 @@ export class WorkerReport {
     @JoinColumn({ name: "report_id" })
     report: AssignedServices[]
 
+    @OneToMany(() => AssignedCarParts, (carpart) => carpart.carPartsFromReport, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: "report_id" })
+    carpart: AssignedCarParts[]
+
     @OneToMany(() => AssignedServices, (assignedService) => assignedService.servicesFromReport)
     reports: AssignedServices[];
+
+    @OneToMany(() => AssignedCarParts, (assignedCarParts) => assignedCarParts.carPartsFromReport)
+    car_parts: AssignedCarParts[];
 }

@@ -15,6 +15,5 @@ export class CreateWorkerReportDto {
     service_ids: number[];
 
     @IsArray()
-    @IsOptional()
     carparts_ids: number[];
 }

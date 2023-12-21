@@ -55,7 +55,6 @@ export class WorkerReportService {
         const workerReport = await this.repo.findOne(report_id, {
             relations: ['report', 'report.assignedService', 'carpart', 'carpart.assignedCarParts'],
         });
-        console.log(workerReport)
 
         if (!workerReport) {
             throw new NotFoundException(`Worker report with id ${report_id} not found.`);
@@ -85,7 +84,7 @@ export class WorkerReportService {
             report_id: workerReport.report_id,
             worker_full_name: `${worker?.worker_name} ${worker?.worker_surname}`,
             services: workerReport.report.map(mapReport),
-            car_parts: workerReport.carpart.map(mapPart)
+            car_parts: workerReport.carpart ? workerReport.carpart.map(mapPart) : undefined
         };
 
         return invoice;

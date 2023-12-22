@@ -10,7 +10,7 @@ import { AssignedCarParts } from 'src/entities/assigned-car-parts.entity';
 @Injectable()
 export class WorkerReportService {
     constructor(@InjectRepository(WorkerReport) private repo: Repository<WorkerReport>,
-        @InjectRepository(AssignedServices) private assignedRepo: Repository<AssignedServices>,
+        @InjectRepository(AssignedServices) private assignedServicesRepo: Repository<AssignedServices>,
         @InjectRepository(AssignedCarParts) private assignedcarPartRepo: Repository<AssignedCarParts>,
         private workerServis: WorkerService) { }
 
@@ -90,20 +90,6 @@ export class WorkerReportService {
         return invoice;
     }
 
-    async getWorkerReportByIdWithServices(reportId: number): Promise<WorkerReport> {
-        const report = await this.repo
-            .createQueryBuilder('workerReport')
-            .leftJoinAndSelect('workerReport.services', 'services')
-            .where('workerReport.report_id = :reportId', { reportId })
-            .getOne();
-
-        if (!report) {
-            throw Error('No data found')
-        }
-
-        return report
-    }
-
     async getWorkerReportsDateAndServiceIdByCarId(carId: number): Promise<any[]> {
         return this.repo.createQueryBuilder('wr')
             .select('wr.date', 'date')
@@ -113,20 +99,62 @@ export class WorkerReportService {
             .getRawMany();
     }
 
-    async getWorkerReportsByDateRange(worker_id: number, startDate: Date, endDate: Date): Promise<WorkerReport[]> {
-        return this.repo.find({
+    async getWorkerReportsByDateRange(worker_id: number, startDate: Date, endDate: Date) {
+        const reportList = await this.repo.find({
             where: {
                 worker_id,
-                date: Between(startDate, endDate)
+                date: Between(startDate, endDate),
             },
-            relations: ['reports'],
+            relations: ['report', 'report.assignedService', 'carpart', 'carpart.assignedCarParts'],
         });
+
+        const processedReports = await this.processWorkerReports(reportList);
+
+        return processedReports;
     }
 
-    async getWorkerReportsByWorkerId(worker_id: number): Promise<MechanicReport[]> {
+    async processWorkerReports(workerReports: WorkerReport[]) {
+        const processedReports = await Promise.all(
+            workerReports.map(async (workerReport) => {
+                const worker = await this.workerServis.findById(workerReport.worker_id);
+
+                const mapReport = (item: Report) => ({
+                    report_id: item.report_id,
+                    price: item.price,
+                    assignedService: {
+                        service_id: item.assignedService.service_id,
+                        service_name: item.assignedService.service_name,
+                    },
+                });
+
+                const mapPart = (item: CarPart) => ({
+                    report_id: item.report_id,
+                    price: item.price,
+                    assignedCarPart: {
+                        car_part_id: item.assignedCarParts.car_part_id,
+                        car_part_name: item.assignedCarParts.car_part_name,
+                    },
+                });
+
+                const invoice = {
+                    report_id: workerReport.report_id,
+                    worker_full_name: `${worker?.worker_name} ${worker?.worker_surname}`,
+                    services: workerReport.report.map(mapReport),
+                    car_parts: workerReport.carpart ? workerReport.carpart.map(mapPart) : undefined,
+                };
+
+                return invoice;
+            })
+        );
+
+        return processedReports;
+    }
+
+
+    async getWorkerReportsByWorkerId(worker_id: number) {
         const workerReports = await this.repo.find({
             where: { worker_id },
-            relations: ['reports', 'reports.assignedService'],
+            relations: ['reports', 'reports.assignedService', 'carpart', 'carpart.assignedCarParts'],
         });
 
         const adjustedReports: MechanicReport[] = workerReports.map((report) => ({
@@ -142,21 +170,17 @@ export class WorkerReportService {
                     service_name: assignedService.assignedService.service_name,
                 },
             })),
+            carpart: report.carpart.map((assignedCarPart) => ({
+                assigned_car_part_id: assignedCarPart.assigned_carpart_id,
+                price: assignedCarPart.price,
+                assignedCarPart: {
+                    car_part_id: assignedCarPart.assignedCarParts.car_part_id,
+                    car_part_name: assignedCarPart.assignedCarParts.car_part_name
+                }
+            }))
         }));
 
         return adjustedReports;
-    }
-
-
-
-    async findReportByWorkerId(worker_id: number) {
-        const report = await this.repo.findOne({ where: { worker_id } });
-
-        if (report) {
-            return report;
-        }
-
-        return new NotFoundException(`Worker's reports was not found`);
     }
 
     async getAllReports(): Promise<WorkerReport[]> {
@@ -195,30 +219,73 @@ export class WorkerReportService {
         return updatedServices;
     }
 
-
-    async remove(report_id: number) {
-        const report = await this.repo.findOne({ where: { report_id } });
-        if (!report) {
-            throw new Error('This report was not found');
-        }
-        return this.repo.remove(report);
-    }
-
-    async deleteWorkerReportWithServices(report_id: number) {
+    async updatePriceForAssignedCarParts(report_id: number, carpartsIds: number[], prices: number[]): Promise<{ carpartsId: number, price: number }[]> {
         const report = await this.repo.findOne(report_id, {
-            relations: ['report'],
+            relations: ['carpart'],
         });
 
         if (!report) {
             throw new NotFoundException(`Worker report with id ${report_id} not found.`);
         }
-        await this.repo.remove(report);
 
-        await this.assignedRepo
-            .createQueryBuilder()
-            .delete()
-            .from(AssignedServices)
-            .where("report_id = :report_id", { report_id })
-            .execute();
+        if (carpartsIds.length !== prices.length) {
+            throw new BadRequestException('The number of carpartsIds should match the number of prices.');
+        }
+
+        const updatedServices = [];
+
+        for (let i = 0; i < carpartsIds.length; i++) {
+            const carpartsId = carpartsIds[i];
+            const price = prices[i];
+
+            await this.repo
+                .createQueryBuilder()
+                .update(AssignedCarParts)
+                .set({ price: price })
+                .where("report_id = :report_id AND car_part_id = :carpartsId", { report_id, carpartsId })
+                .execute();
+
+            updatedServices.push({ carpartsId, price });
+        }
+
+        return updatedServices;
     }
+
+    async deleteWorkerReportWithServices(report_id: number) {
+        try {
+            const report = await this.repo.findOne(report_id, {
+                relations: ['report', 'report.assignedService', 'carpart', 'carpart.assignedCarParts'],
+            });
+
+            if (!report) {
+                throw new NotFoundException(`Worker report with id ${report_id} not found.`);
+            }
+
+            await this.repo.remove(report);
+
+            if (report.report) {
+                await this.assignedServicesRepo
+                    .createQueryBuilder()
+                    .delete()
+                    .from(AssignedServices)
+                    .where("report_id IN (:...reportIds)", { reportIds: report.report.map((r) => r.report_id) })
+                    .execute();
+            }
+
+            if (report.carpart) {
+                await this.assignedcarPartRepo
+                    .createQueryBuilder()
+                    .delete()
+                    .from(AssignedCarParts)
+                    .where("report_id IN (:...reportIds)", { reportIds: report.carpart.map((c) => c.report_id) })
+                    .execute();
+            }
+
+            return { success: true, message: 'Report and associated records deleted successfully.' };
+        } catch (error) {
+            return { success: false, message: error.message || 'An error occurred while deleting the report.' };
+        }
+    }
+
+
 }

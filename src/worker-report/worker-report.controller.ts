@@ -3,34 +3,12 @@ import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { WorkerReportService } from './worker-report.service';
 import { CreateWorkerReportDto } from './dto/create-worker-report.dto';
 import { getManager } from "typeorm"
+import { SetUpdatePricesPerReportDto } from './dto/update-price-worker-report.dto';
 
 @ApiTags('Worker Report')
 @Controller('worker-report')
 export class WorkerReportController {
     constructor(private wkService: WorkerReportService) { }
-
-    @Post(`get-specific's-worker-report/:worker_id`)
-    @ApiBody({
-        schema: {
-            type: 'object',
-            properties: {
-                worker_id: {
-                    type: 'number',
-                    example: '7'
-                }
-            }
-        }
-    })
-    async findWorkersReportByWorkerId(@Param('worker_id') worker_id: number) {
-        const report = await this.wkService.findReportByWorkerId(worker_id)
-
-        if (!report) {
-            throw new NotFoundException('No found reports for this worker')
-        }
-        return report;
-    }
-
-
 
     @Post('create-new-worker-report')
     @ApiBody({
@@ -103,16 +81,16 @@ export class WorkerReportController {
     @Patch(':id/update-price')
     async updatePriceForAssignedServices(
         @Param('id') report_id: number,
-        @Body() updatePriceDto: { serviceIds: number[], price: number[] },
+        @Body() updatePriceDto: SetUpdatePricesPerReportDto,
     ) {
         const updatedServices = await this.wkService.updatePriceForAssignedServices(report_id, updatePriceDto.serviceIds, updatePriceDto.price);
+        const updatedCarParts = await this.wkService.updatePriceForAssignedCarParts(report_id, updatePriceDto.carpartsService, updatePriceDto.carpartsPrice);
 
-        const response = {
+        return {
             message: 'Prices updated successfully',
             updatedServices: updatedServices,
-        };
-
-        return response;
+            updatedCarParts: updatedCarParts,
+        };;
     }
 
     @Delete('delete-worker-report/:report_id')

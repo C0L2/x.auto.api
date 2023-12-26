@@ -54,3 +54,22 @@ type assignedCarParts = {
     car_part_id: number,
     car_part_name: string
 }
+
+export type SpecificReport = {
+    report_id: number,
+    worker_full_name: string,
+    services: ServicesItem[],
+    car_parts: CarPartItem[]
+}
+
+type ServicesItem = {
+    report_id: number,
+    price: number | null,
+    assignedService: assignedService
+}
+
+type CarPartItem = {
+    report_id: number,
+    price: number | null,
+    assignedCarPart: assignedCarParts
+}

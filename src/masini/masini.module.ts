@@ -18,6 +18,7 @@ import { JwtModule } from '@nestjs/jwt';
     signOptions: { expiresIn: '1200s' },
   }),],
   controllers: [MasiniController],
-  providers: [MasiniService, ClientService, AuthManagerGuard]
+  providers: [MasiniService, ClientService, AuthManagerGuard],
+  exports: [MasiniService]
 })
 export class MasiniModule { }

@@ -7,9 +7,10 @@ import { WorkerReport } from 'src/entities/worker-report.entity';
 import { WorkerModule } from 'src/worker/workers.module';
 import { AssignedCarParts } from 'src/entities/assigned-car-parts.entity';
 import { AssignedServices } from 'src/entities/assigned-services.entity';
+import { MasiniModule } from 'src/masini/masini.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([AssignedCarParts, AssignedServices, WorkerReport]), WorkerModule],
+  imports: [TypeOrmModule.forFeature([AssignedCarParts, AssignedServices, WorkerReport]), MasiniModule, WorkerModule],
   providers: [AssignedCarPartsService, WorkerReportService],
   controllers: [AssignedCarpartsController]
 })

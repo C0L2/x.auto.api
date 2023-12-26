@@ -3,16 +3,19 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { WorkerReport } from 'src/entities/worker-report.entity';
 import { Between, EntityManager, Repository } from 'typeorm';
 import { AssignedServices } from 'src/entities/assigned-services.entity';
-import { CarPart, MechanicReport, Report } from 'src/types';
+import { MechanicReport } from 'src/types';
 import { WorkerService } from 'src/worker/worker.service';
 import { AssignedCarParts } from 'src/entities/assigned-car-parts.entity';
+import { mapPart, mapReport } from 'src/utils/process-worker-report';
+import { MasiniService } from 'src/masini/masini.service';
 
 @Injectable()
 export class WorkerReportService {
     constructor(@InjectRepository(WorkerReport) private repo: Repository<WorkerReport>,
         @InjectRepository(AssignedServices) private assignedServicesRepo: Repository<AssignedServices>,
         @InjectRepository(AssignedCarParts) private assignedcarPartRepo: Repository<AssignedCarParts>,
-        private workerServis: WorkerService) { }
+        private workerServis: WorkerService,
+        private masiniService: MasiniService) { }
 
     async createWorkerReportWithServices(
         worker_id: number,
@@ -62,24 +65,6 @@ export class WorkerReportService {
 
         const worker = await this.workerServis.findById(workerReport.worker_id);
 
-        const mapReport = (item: Report) => ({
-            report_id: item.report_id,
-            price: item.price,
-            assignedService: {
-                service_id: item.assignedService.service_id,
-                service_name: item.assignedService.service_name,
-            },
-        });
-
-        const mapPart = (item: CarPart) => ({
-            report_id: item.report_id,
-            price: item.price,
-            assignedCarPart: {
-                car_part_id: item.assignedCarParts.car_part_id,
-                car_part_name: item.assignedCarParts.car_part_name,
-            },
-        })
-
         const invoice = {
             report_id: workerReport.report_id,
             worker_full_name: `${worker?.worker_name} ${worker?.worker_surname}`,
@@ -90,13 +75,19 @@ export class WorkerReportService {
         return invoice;
     }
 
-    async getWorkerReportsDateAndServiceIdByCarId(carId: number): Promise<any[]> {
-        return this.repo.createQueryBuilder('wr')
-            .select('wr.date', 'date')
-            .addSelect('as.service_id', 'service_id')
-            .innerJoin('wr.report', 'as')
-            .where('wr.car_id = :carId', { carId })
-            .getRawMany();
+    async getWorkerReportsDateAndServiceIdByCarId(vin_code: string) {
+
+        const carPromise = this.masiniService.findCarByVinCode(vin_code);
+        const reportsPromise = this.repo.find({
+            where: {
+                car_id: (await carPromise).car_id,
+            },
+            relations: ['report', 'report.assignedService', 'carpart', 'carpart.assignedCarParts']
+        });
+
+        const [car, reportByCarId] = await Promise.all([carPromise, reportsPromise]);
+
+        return await this.processWorkerReports(reportByCarId);
     }
 
     async getWorkerReportsByDateRange(worker_id: number, startDate: Date, endDate: Date) {
@@ -108,9 +99,7 @@ export class WorkerReportService {
             relations: ['report', 'report.assignedService', 'carpart', 'carpart.assignedCarParts'],
         });
 
-        const processedReports = await this.processWorkerReports(reportList);
-
-        return processedReports;
+        return await this.processWorkerReports(reportList);
     }
 
     async processWorkerReports(workerReports: WorkerReport[]) {
@@ -118,32 +107,14 @@ export class WorkerReportService {
             workerReports.map(async (workerReport) => {
                 const worker = await this.workerServis.findById(workerReport.worker_id);
 
-                const mapReport = (item: Report) => ({
-                    report_id: item.report_id,
-                    price: item.price,
-                    assignedService: {
-                        service_id: item.assignedService.service_id,
-                        service_name: item.assignedService.service_name,
-                    },
-                });
-
-                const mapPart = (item: CarPart) => ({
-                    report_id: item.report_id,
-                    price: item.price,
-                    assignedCarPart: {
-                        car_part_id: item.assignedCarParts.car_part_id,
-                        car_part_name: item.assignedCarParts.car_part_name,
-                    },
-                });
-
-                const invoice = {
+                const report = {
                     report_id: workerReport.report_id,
                     worker_full_name: `${worker?.worker_name} ${worker?.worker_surname}`,
                     services: workerReport.report.map(mapReport),
                     car_parts: workerReport.carpart ? workerReport.carpart.map(mapPart) : undefined,
                 };
 
-                return invoice;
+                return report;
             })
         );
 
@@ -183,8 +154,9 @@ export class WorkerReportService {
         return adjustedReports;
     }
 
-    async getAllReports(): Promise<WorkerReport[]> {
-        return await this.repo.find();
+    async getAllReports() {
+        return await this.repo.find({ relations: ['reports', 'reports.assignedService', 'carpart', 'carpart.assignedCarParts'] }
+        );
     }
 
     async updatePriceForAssignedServices(report_id: number, serviceIds: number[], prices: number[]): Promise<{ serviceId: number, price: number }[]> {

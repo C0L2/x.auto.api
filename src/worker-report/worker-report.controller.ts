@@ -4,6 +4,7 @@ import { WorkerReportService } from './worker-report.service';
 import { CreateWorkerReportDto } from './dto/create-worker-report.dto';
 import { getManager } from "typeorm"
 import { SetUpdatePricesPerReportDto } from './dto/update-price-worker-report.dto';
+import { SpecificReport } from 'src/types';
 
 @ApiTags('Worker Report')
 @Controller('worker-report')
@@ -73,9 +74,14 @@ export class WorkerReportController {
         return workerReports;
     }
 
-    @Get(':carId/date-and-service-id')
-    async getWorkerReportsDateAndServiceIdByCarId(@Param('carId') carId: number) {
-        return this.wkService.getWorkerReportsDateAndServiceIdByCarId(carId);
+    @Get(':vin_code/date-and-service-id')
+    async getWorkerReportsDateAndServiceIdByCarId(@Param('vin_code') vin_code: string) {
+        return this.wkService.getWorkerReportsDateAndServiceIdByCarId(vin_code);
+    }
+
+    @Get('all')
+    async getAllExistingWorkerReports() {
+        return this.wkService.getAllReports()
     }
 
     @Patch(':id/update-price')

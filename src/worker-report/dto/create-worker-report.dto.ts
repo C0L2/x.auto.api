@@ -1,4 +1,4 @@
-import { IsArray, IsInt, ArrayMinSize, IsDateString, IsOptional } from 'class-validator';
+import { IsArray, IsInt, ArrayMinSize, IsDateString } from 'class-validator';
 
 export class CreateWorkerReportDto {
     @IsInt()

@@ -1,9 +1,9 @@
-import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { WorkerReport } from 'src/entities/worker-report.entity';
 import { Between, EntityManager, Repository } from 'typeorm';
 import { AssignedServices } from 'src/entities/assigned-services.entity';
-import { MechanicReport } from 'src/types';
+import { MechanicReport, SpecificReport } from 'src/types';
 import { WorkerService } from 'src/worker/worker.service';
 import { AssignedCarParts } from 'src/entities/assigned-car-parts.entity';
 import { mapPart, mapReport } from 'src/utils/process-worker-report';
@@ -68,12 +68,28 @@ export class WorkerReportService {
         const invoice = {
             report_id: workerReport.report_id,
             worker_full_name: `${worker?.worker_name} ${worker?.worker_surname}`,
+            date: workerReport.date,
             services: workerReport.report.map(mapReport),
             car_parts: workerReport.carpart ? workerReport.carpart.map(mapPart) : undefined
         };
 
         return invoice;
     }
+
+    async updateWorkerReportWithServices(report_id: number, updatedData: Partial<SpecificReport>) {
+        const workerReport = await this.repo.findOne(report_id, {
+            relations: ['report', 'report.assignedService', 'carpart', 'carpart.assignedCarParts'],
+        });
+
+        if (!workerReport) {
+            throw new NotFoundException(`Worker report with id ${report_id} not found.`);
+        }
+
+        Object.assign(workerReport, updatedData);
+
+        await this.repo.save(workerReport);
+    }
+
 
     async getWorkerReportsDateAndServiceIdByCarId(vin_code: string) {
 
@@ -110,6 +126,7 @@ export class WorkerReportService {
                 const report = {
                     report_id: workerReport.report_id,
                     worker_full_name: `${worker?.worker_name} ${worker?.worker_surname}`,
+                    date: workerReport.date,
                     services: workerReport.report.map(mapReport),
                     car_parts: workerReport.carpart ? workerReport.carpart.map(mapPart) : undefined,
                 };

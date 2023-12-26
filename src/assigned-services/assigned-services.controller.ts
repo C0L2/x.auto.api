@@ -1,4 +1,4 @@
-import { Controller, Delete, Param } from '@nestjs/common';
+import { Body, Controller, Delete } from '@nestjs/common';
 import { AssignedServicesService } from './assigned-services.service';
 
 @Controller('assigned-services')
@@ -7,10 +7,16 @@ export class AssignedServicesController {
         private readonly assignedServicesService: AssignedServicesService,
     ) { }
 
-    @Delete('delete-assigned-service/:assigned_service_id')
-    async deleteAssignedService(@Param('assigned_service_id') assigned_service_id: number) {
-        const reportId = await this.assignedServicesService.deleteAssignedService(assigned_service_id);
-        return { message: `Assigned service with id ${assigned_service_id} has been deleted from WorkerReport ${reportId}.` };
+    @Delete('delete-assigned-service')
+    async deleteAssignedServices(@Body() requestBody: { report_id: number; assigned_service_ids: number[] }) {
+        const { report_id, assigned_service_ids } = requestBody;
+
+        await this.assignedServicesService.deleteAssignedServicesByReportIdAndIds(
+            report_id,
+            assigned_service_ids,
+        );
+
+        return { message: 'Assigned services deleted successfully.' };
     }
 
 }

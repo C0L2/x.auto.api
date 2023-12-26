@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { WorkerReportService } from './worker-report.service';
 import { CreateWorkerReportDto } from './dto/create-worker-report.dto';
@@ -82,6 +82,19 @@ export class WorkerReportController {
     @Get('all')
     async getAllExistingWorkerReports() {
         return this.wkService.getAllReports()
+    }
+
+    @Put(':report_id')
+    async updateWorkerReportWithServices(
+        @Param('report_id') report_id: number,
+        @Body() updatedData: Partial<SpecificReport>,
+    ) {
+        try {
+            await this.wkService.updateWorkerReportWithServices(report_id, updatedData);
+            return { message: 'Worker report updated successfully.' };
+        } catch (error) {
+            return { error: error.message };
+        }
     }
 
     @Patch(':id/update-price')

@@ -1,4 +1,4 @@
-import { Module, forwardRef } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { WorkerReportController } from './worker-report.controller';
 import { WorkerReportService } from './worker-report.service';
 import { WorkerReport } from 'src/entities/worker-report.entity';

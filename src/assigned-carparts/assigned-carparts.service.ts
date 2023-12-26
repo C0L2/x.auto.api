@@ -9,28 +9,22 @@ export class AssignedCarPartsService {
     constructor(
         @InjectRepository(AssignedCarParts)
         private readonly assignedCarPartsRepository: Repository<AssignedCarParts>,
-        @InjectRepository(WorkerReport)
-        private readonly workerReportRepository: Repository<WorkerReport>,
     ) { }
 
-    async deleteAssignedCarPart(assigned_carpart_id: number) {
-        const assignedCarPart = await this.assignedCarPartsRepository.findOne(assigned_carpart_id);
+    async deleteAssignedCarPartsByReportIdAndIds(report_id: number, assignedCarPartsIds: number[]) {
+        for (const assignedCarPartId of assignedCarPartsIds) {
+            const assignedCarPartToDelete = await this.assignedCarPartsRepository.findOne({
+                where: {
+                    report_id,
+                    assigned_carpart_id: assignedCarPartId,
+                },
+            });
 
-        if (!assignedCarPart) {
-            throw new NotFoundException(`Assigned car-part with id ${assigned_carpart_id} not found.`);
-        }
+            if (!assignedCarPartToDelete) {
+                throw new NotFoundException(`Assigned service with ID ${assignedCarPartId} not found.`);
+            }
 
-        const reportId = assignedCarPart.report_id;
-
-        await this.assignedCarPartsRepository.remove(assignedCarPart);
-
-        const report = await this.workerReportRepository.findOne(reportId, { relations: ['carpart'] });
-
-        if (report) {
-            report.carpart = report.carpart.filter((carpart) => carpart.assigned_carpart_id !== assigned_carpart_id);
-            await this.workerReportRepository.save(report);
-        } else {
-            throw new NotFoundException(`Worker report with id ${reportId} not found.`);
+            await this.assignedCarPartsRepository.remove(assignedCarPartToDelete);
         }
     }
 }

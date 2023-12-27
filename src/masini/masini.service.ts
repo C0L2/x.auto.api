@@ -53,6 +53,14 @@ export class MasiniService {
         return car
     }
 
+    async findCarById(car_id: number): Promise<Masini> {
+        const car = await this.repo.findOne({ where: { car_id } })
+        if (!car) {
+            throw new ConflictException('This car was not found');
+        }
+        return car
+    }
+
     async getAll(): Promise<Masini[]> {
         return await this.repo.find();
     }

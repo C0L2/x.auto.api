@@ -6,8 +6,11 @@ import { AssignedServices } from 'src/entities/assigned-services.entity';
 import { MechanicReport, SpecificReport } from 'src/types';
 import { WorkerService } from 'src/worker/worker.service';
 import { AssignedCarParts } from 'src/entities/assigned-car-parts.entity';
-import { mapPart, mapReport } from 'src/utils/process-worker-report';
+import { mapCar, mapPart, mapReport } from 'src/utils/process-worker-report';
 import { MasiniService } from 'src/masini/masini.service';
+import { ClientService } from 'src/client/client.service';
+import { Masini } from 'src/entities/masini.entity';
+import { sumPrices } from 'src/utils/calculate-sume';
 
 @Injectable()
 export class WorkerReportService {
@@ -15,6 +18,7 @@ export class WorkerReportService {
         @InjectRepository(AssignedServices) private assignedServicesRepo: Repository<AssignedServices>,
         @InjectRepository(AssignedCarParts) private assignedcarPartRepo: Repository<AssignedCarParts>,
         private workerServis: WorkerService,
+        private clientService: ClientService,
         private masiniService: MasiniService) { }
 
     async createWorkerReportWithServices(
@@ -23,6 +27,7 @@ export class WorkerReportService {
         date: Date,
         serviceIds: number[],
         carpartIds: number[],
+        carpartCount: number[],
         entityManager: EntityManager,
     ) {
         return await entityManager.transaction(async transactionalEntityManager => {
@@ -40,10 +45,11 @@ export class WorkerReportService {
                 return assignedService;
             });
 
-            const assignedCarParts = carpartIds.map(carpartId => {
+            const assignedCarParts = carpartIds.map((carpartId, index) => {
                 const assignedCarPart = new AssignedCarParts();
                 assignedCarPart.report_id = createdReport.report_id;
                 assignedCarPart.car_part_id = carpartId;
+                assignedCarPart.count = carpartCount[index];
                 return assignedCarPart;
             });
 
@@ -63,18 +69,30 @@ export class WorkerReportService {
             throw new NotFoundException(`Worker report with id ${report_id} not found.`);
         }
 
-        const worker = await this.workerServis.findById(workerReport.worker_id);
+        try {
+            const car: Masini = await this.masiniService.findCarById(workerReport.car_id);
+            const worker = await this.workerServis.findById(workerReport.worker_id);
+            const client = await this.clientService.findById(car.client_id);
 
-        const invoice = {
-            report_id: workerReport.report_id,
-            worker_full_name: `${worker?.worker_name} ${worker?.worker_surname}`,
-            date: workerReport.date,
-            services: workerReport.report.map(mapReport),
-            car_parts: workerReport.carpart ? workerReport.carpart.map(mapPart) : undefined
-        };
+            const invoice = {
+                report_id: workerReport.report_id,
+                worker_full_name: `${worker?.worker_name} ${worker?.worker_surname}`,
+                car: mapCar(car),
+                client: client ? client : { message: "No client assigned" },
+                date: workerReport.date,
+                services: workerReport.report.map(mapReport),
+                car_parts: workerReport.carpart ? workerReport.carpart.map(mapPart) : undefined,
+                total: sumPrices(workerReport.report, workerReport.carpart)
+            };
+            return invoice;
 
-        return invoice;
+        } catch (error) {
+            console.error("An error occurred:", error);
+        }
+
+
     }
+
 
     async updateWorkerReportWithServices(report_id: number, updatedData: Partial<SpecificReport>) {
         const workerReport = await this.repo.findOne(report_id, {

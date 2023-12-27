@@ -1,4 +1,4 @@
-import { Body, Controller, Delete } from '@nestjs/common';
+import { Body, Controller, Delete, Param, ParseIntPipe, Post } from '@nestjs/common';
 import { AssignedServicesService } from './assigned-services.service';
 
 @Controller('assigned-services')
@@ -17,6 +17,15 @@ export class AssignedServicesController {
         );
 
         return { message: 'Assigned services deleted successfully.' };
+    }
+
+    @Post(':report_id')
+    async createAssignedCarParts(
+        @Param('report_id', ParseIntPipe) report_id: number,
+        @Body() serviceidsIdsObject: { serviceIds: number[] },
+    ) {
+        const result = await this.assignedServicesService.createAssignedServices(report_id, serviceidsIdsObject);
+        return { message: 'Assigned services created successfully.', result };
     }
 
 }

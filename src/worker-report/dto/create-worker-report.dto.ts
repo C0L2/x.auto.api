@@ -16,4 +16,7 @@ export class CreateWorkerReportDto {
 
     @IsArray()
     carparts_ids: number[];
+
+    @IsArray()
+    carpartCount: number[];
 }

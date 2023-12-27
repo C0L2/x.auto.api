@@ -5,6 +5,7 @@ import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { Client } from '../entities/client.entity';
+import { WorkerReportModule } from 'src/worker-report/worker-report.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { Client } from '../entities/client.entity';
     }),
   ],
   controllers: [ClientController],
-  providers: [ClientService]
+  providers: [ClientService],
+  exports: [ClientService]
 })
 export class ClientModule { }

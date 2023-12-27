@@ -22,6 +22,9 @@ export class AssignedCarParts {
     @Column({ nullable: true })
     price: number
 
+    @Column()
+    count: number
+
     @ManyToOne(() => CarParts, (assignedCarParts) => assignedCarParts.carParts, { onDelete: 'CASCADE' })
     @JoinColumn({ name: "car_part_id" })
     assignedCarParts: CarParts

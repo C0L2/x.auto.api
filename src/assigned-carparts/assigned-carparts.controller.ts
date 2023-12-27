@@ -1,5 +1,6 @@
-import { Body, Controller, Delete, Param } from '@nestjs/common';
+import { Body, Controller, Delete, Param, ParseIntPipe, Post } from '@nestjs/common';
 import { AssignedCarPartsService } from './assigned-carparts.service';
+import { AssignedCarParts } from 'src/entities/assigned-car-parts.entity';
 
 @Controller('assigned-carparts')
 export class AssignedCarpartsController {
@@ -18,5 +19,14 @@ export class AssignedCarpartsController {
         );
 
         return { message: 'Assigned carparts deleted successfully.' };
+    }
+
+    @Post(':report_id')
+    async createAssignedCarParts(
+        @Param('report_id', ParseIntPipe) report_id: number,
+        @Body() carPartIdsObject: { carPartIds: number[] },
+    ) {
+        const result = await this.assignedCarPartsService.createAssignedCarParts(report_id, carPartIdsObject);
+        return { message: 'Assigned car parts created successfully.', result };
     }
 }

@@ -1,4 +1,5 @@
 import { Client } from "./entities/client.entity";
+import { Masini } from "./entities/masini.entity";
 
 export type getAllclientsResponse = {
     numberOfClients: number;
@@ -42,7 +43,8 @@ export type Report = {
 export type CarPart = {
     report_id?: number,
     assignedCarParts: assignedCarParts,
-    price: number | null
+    price: number | null,
+    count: number
 }
 
 type assignedService = {
@@ -52,23 +54,28 @@ type assignedService = {
 
 type assignedCarParts = {
     car_part_id: number,
-    car_part_name: string
+    car_part_name: string,
 }
 
 export type SpecificReport = {
     report_id: number,
     worker_full_name: string,
+    car: Masini,
+    client: Client,
+    date?: Date,
     services: ServicesItem[],
-    car_parts: CarPartItem[]
+    car_parts: CarPartItem[],
+    count?: number
+    total: number
 }
 
-type ServicesItem = {
+export type ServicesItem = {
     report_id: number,
     price: number | null,
     assignedService: assignedService
 }
 
-type CarPartItem = {
+export type CarPartItem = {
     report_id: number,
     price: number | null,
     assignedCarPart: assignedCarParts

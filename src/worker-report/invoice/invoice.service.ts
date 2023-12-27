@@ -11,6 +11,4 @@ export class InvoiceService {
         const res = await this.wkReport.getWorkerReportWithServices(report_id);
         return convertToSpecificReport(res);
     }
-
-
 }

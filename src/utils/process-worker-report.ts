@@ -27,7 +27,3 @@ export const mapCar = (item: Masini) => ({
     reg_number: item.registration_number,
     km: item.km,
 })
-
-export const mapClient = (item: Client) => ({
-    client_id: item.client_id,
-})

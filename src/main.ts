@@ -9,8 +9,14 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 dotenv.config({ path: `.env.${process.env.NODE_ENV || 'dev'}` });
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true });
-  app.use(
+  const app = await NestFactory.create(AppModule);
+  app.enableCors({
+    origin: [
+      'http://localhost:5173',
+    ],
+    methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
+    credentials: true,
+  }); app.use(
     session({
       secret: 'secret',
       resave: false,

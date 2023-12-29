@@ -99,7 +99,8 @@ export class WorkerController {
       body.password,
       session,
     );
-    const res = { message: 'Logged in successfully', access_token: token };
+    const user = session.worker
+    const res = { message: 'Logged in successfully', access_token: token, user };
     return res;
   }
 

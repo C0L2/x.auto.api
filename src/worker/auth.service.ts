@@ -99,6 +99,6 @@ export class AuthService {
     };
 
     session.jwt_token = access_token;
-    return access_token;
+    return access_token
   }
 }

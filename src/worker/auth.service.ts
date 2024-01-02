@@ -101,4 +101,11 @@ export class AuthService {
     session.jwt_token = access_token;
     return access_token
   }
+
+  async logout(@Session() session: any): Promise<void> {
+    if (session.worker) {
+      delete session.worker;
+      delete session.jwt_token;
+    }
+  }
 }

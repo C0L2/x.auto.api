@@ -11,6 +11,7 @@ import {
   Put,
   Param,
   NotFoundException,
+  Res,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoignWorkerDto } from './dto/login-worker.dto';
@@ -102,6 +103,11 @@ export class WorkerController {
     const user = session.worker
     const res = { message: 'Logged in successfully', access_token: token, user };
     return res;
+  }
+
+  @Post('/logout')
+  async logout(@Session() session: any): Promise<void> {
+    return await this.authService.logout(session);
   }
 
   @Get('/protected')

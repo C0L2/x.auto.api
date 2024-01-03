@@ -9,6 +9,7 @@ import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
 import { JwtService } from '@nestjs/jwt';
 import { RoleService } from 'src/role/role.service';
+import * as jwt from 'jsonwebtoken';
 
 const scrypt = promisify(_scrypt);
 
@@ -106,6 +107,22 @@ export class AuthService {
     if (session.worker) {
       delete session.worker;
       delete session.jwt_token;
+    }
+  }
+
+  verifyToken(token: string): { success: boolean; message: string } {
+    try {
+      const decodedToken: any = jwt.verify(token, process.env.JWT_SECRET!);
+
+      const isTokenExpired = new Date().getTime() / 1000 > decodedToken.exp;
+
+      if (isTokenExpired) {
+        return { success: false, message: 'Tokenul JWT este expirat.' };
+      }
+
+      return { success: true, message: 'Token is valid' };
+    } catch (error) {
+      return { success: false, message: 'Error on JWT verification' };
     }
   }
 }

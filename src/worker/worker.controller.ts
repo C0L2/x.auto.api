@@ -110,15 +110,9 @@ export class WorkerController {
     return await this.authService.logout(session);
   }
 
-  @Get('/protected')
-  @UseGuards(AuthGuard)
-  getProtectedRoute(@Session() session: session) {
-    if (session.worker) {
-      console.log(session)
-      return { message: 'Welcome to the protected route!' };
-    } else {
-      return { message: 'Unauthorized' };
-    }
+  @Get('/users/@me')
+  getProtectedRoute(@Body() token: string) {
+    return this.authService.verifyToken(token)
   }
 
   @Get('all')

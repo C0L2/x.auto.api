@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Masini } from '../entities/masini.entity';
 import { Repository } from 'typeorm';
@@ -14,7 +14,7 @@ export class MasiniService {
         if (body.client_id) {
             const client = await this.clientService.findById(body.client_id);
             if (!client) {
-                throw new ConflictException('This client was not found in database')
+                throw new NotFoundException('This client was not found in database')
             }
         }
 
@@ -33,11 +33,11 @@ export class MasiniService {
         ]);
 
         if (!existingCar) {
-            throw new ConflictException(`Car not found`);
+            throw new NotFoundException(`Car not found`);
         }
 
         if (!client) {
-            throw new ConflictException(`Client with ID ${clientId} not found`);
+            throw new NotFoundException(`Client with ID ${clientId} not found`);
         }
 
         existingCar.client_id = clientId;
@@ -48,7 +48,7 @@ export class MasiniService {
     async findCarByVinCode(vin_code: string): Promise<Masini> {
         const car = await this.repo.findOne({ where: { vin_code } })
         if (!car) {
-            throw new ConflictException('This car was not found');
+            throw new NotFoundException('This car was not found');
         }
         return car
     }
@@ -56,7 +56,7 @@ export class MasiniService {
     async findCarById(car_id: number): Promise<Masini> {
         const car = await this.repo.findOne({ where: { car_id } })
         if (!car) {
-            throw new ConflictException('This car was not found');
+            throw new NotFoundException('This car was not found');
         }
         return car
     }
@@ -68,7 +68,7 @@ export class MasiniService {
     async remove(car_id: number) {
         const car = await this.repo.findOne({ where: { car_id } });
         if (!car) {
-            throw new ConflictException('This car was not found');
+            throw new NotFoundException('This car was not found');
         }
         return this.repo.remove(car);
     }

@@ -80,3 +80,11 @@ export type CarPartItem = {
     price: number | null,
     assignedCarPart: assignedCarParts
 }
+
+export interface Session {
+    sub: number;
+    worker_name: string;
+    worker_surname: string;
+    email: string;
+    role: number;
+}

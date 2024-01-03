@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CarParts } from 'src/entities/car-parts.entity';
 import { ILike, Repository } from 'typeorm';
@@ -30,7 +30,7 @@ export class CarPartsService {
     async remove(car_part_id: number): Promise<CarParts> {
         const car_part = await this.repo.findOne({ where: { car_part_id } });
         if (!car_part) {
-            throw new ConflictException('Car part not found');
+            throw new NotFoundException('Car part not found');
         }
         return this.repo.remove(car_part);
     }
@@ -41,7 +41,7 @@ export class CarPartsService {
 
     async findByName(car_part_name: string): Promise<CarParts[] | undefined> {
         const car_part = await this.repo.find({ where: { car_part_name: ILike(car_part_name) } });
-        if (!car_part) throw new ConflictException('No car-part found with this name')
+        if (!car_part) throw new NotFoundException('No car-part found with this name')
         return car_part
     }
 

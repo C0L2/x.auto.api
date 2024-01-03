@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Client } from '../entities/client.entity';
 import { ILike, Repository } from 'typeorm';
@@ -37,7 +37,7 @@ export class ClientService {
     async update(client_id: number, attrs: Partial<Client>): Promise<Client> {
         const client = await this.findById(client_id);
         if (!client) {
-            throw new ConflictException('Client not found');
+            throw new NotFoundException('Client not found');
         }
         Object.assign(client, attrs);
 
@@ -47,7 +47,7 @@ export class ClientService {
     async remove(client_id: number) {
         const client = await this.repo.findOne({ where: { client_id } });
         if (!client) {
-            throw new ConflictException('Not found a client with this id');
+            throw new NotFoundException('Not found a client with this id');
         }
         this.repo.remove(client);
         return { message: 'Client deleted successfully' }
@@ -72,7 +72,7 @@ export class ClientService {
 
     async findByName(nume_client: string): Promise<Client[] | undefined> {
         const client = await this.repo.find({ where: { nume_client: ILike(nume_client) } });
-        if (!client) throw new ConflictException('No client found with this name')
+        if (!client) throw new NotFoundException('No client found with this name')
         return client
     }
 }

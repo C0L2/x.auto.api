@@ -10,9 +10,14 @@ export class Programari {
     programare_name: string;
 
     @Column({ type: 'timestamp' })
-    registr_date: Date;
+    programare_date: Date;
+
+    @Column({ nullable: true, default: null })
+    description: string;
 
     @Column({ type: 'integer', nullable: true, default: null })
+    client_id: number;
+
     @ManyToOne(() => Client, client => client.programari)
     @JoinColumn({ name: 'client_id' })
     client: Client;

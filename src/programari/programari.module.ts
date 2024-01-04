@@ -5,6 +5,7 @@ import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { Programari } from '../entities/programari.entity';
+import { ClientModule } from 'src/client/client.module';
 
 @Module({
   imports: [PassportModule.register({ defaultStrategy: 'local' }),
@@ -12,7 +13,7 @@ import { Programari } from '../entities/programari.entity';
   JwtModule.register({
     secret: 'secret',
     signOptions: { expiresIn: '1200s' },
-  }),
+  }), ClientModule
   ],
   controllers: [ProgramariController],
   providers: [ProgramariService]

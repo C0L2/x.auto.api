@@ -56,10 +56,7 @@ export class ProgramariController {
         },
     })
     async createProgramare(@Body() body: CreateProgramareDto): Promise<CreatedAppointmentRes> {
-        await this.progService.create(
-            body.programare_name,
-            body.registr_date
-        );
+        await this.progService.create(body);
         return { message: 'Successfully added new appointment', programare: body };
     }
 
@@ -271,5 +268,20 @@ export class ProgramariController {
     })
     async getProgramariForTomorew(): Promise<Programari[]> {
         return await this.progService.getProgramariForTomorrow();
+    }
+
+    @Get('appointments-for-current-week')
+    async getProgramariForCurrentWeek(): Promise<Programari[]> {
+        return await this.progService.getProgramariForCurrentWeek();
+    }
+
+    @Get('appointments-for-next-week')
+    async getProgramariForNextWeek(): Promise<Programari[]> {
+        return await this.progService.getProgramariForNextWeek();
+    }
+
+    @Get('appointments-for-current-month')
+    async getProgramariForCurrentMonth(): Promise<Programari[]> {
+        return await this.progService.getProgramariForCurrentMonth();
     }
 }

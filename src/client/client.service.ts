@@ -10,25 +10,25 @@ export class ClientService {
         @InjectRepository(Client) private repo: Repository<Client>) { }
 
     async create(
-        nume_client: string,
+        client_name: string,
         email: string,
-        numar_telefon: string
+        phone_number: string
     ): Promise<Client> {
         const existingClient = await this.repo.findOne({
-            where: [{ email }, { numar_telefon }],
+            where: [{ email }, { phone_number }],
         });
 
         if (existingClient) {
-            if (existingClient.email === email && existingClient.numar_telefon === numar_telefon) {
+            if (existingClient.email === email && existingClient.phone_number === phone_number) {
                 throw new ConflictException("Client with number and email already exists");
             }
             throw new ConflictException("Client with one of these credentials already exists");
         }
 
         const client = this.repo.create({
-            nume_client,
+            client_name,
             email,
-            numar_telefon,
+            phone_number,
         });
 
         return await this.repo.save(client);

@@ -8,27 +8,27 @@ import {
     Unique,
 } from 'typeorm';
 import { Masini } from './masini.entity';
-import { Programari } from './programari.entity';
+import { Appointment } from './appointment.entity';
 
 @Entity()
-@Unique(['email', 'numar_telefon'])
+@Unique(['email', 'phone_number'])
 export class Client {
     @PrimaryGeneratedColumn()
     client_id: number;
 
     @Column()
-    nume_client: string;
+    client_name: string;
 
     @Column()
     email: string;
 
     @Column()
-    numar_telefon: string;
+    phone_number: string;
 
     @OneToMany(() => Masini, (car) => car.client, { onDelete: 'CASCADE' })
     @JoinColumn({ name: "client_id" })
     car: Masini[]
 
-    @OneToMany(() => Programari, (programare) => programare.client, { onDelete: 'CASCADE' })
-    programari: Programari[];
+    @OneToMany(() => Appointment, (appointment) => appointment.worker, { onDelete: 'CASCADE' })
+    appointment: Appointment[];
 }

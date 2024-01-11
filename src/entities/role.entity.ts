@@ -1,6 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, JoinColumn } from 'typeorm';
 import { Worker } from 'src/entities/worker.entity';
-import { Client } from 'src/entities/client.entity';
 
 @Entity()
 export class Role {

@@ -10,6 +10,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { WorkerReport } from './worker-report.entity';
+import { Appointment } from './appointment.entity';
 
 @Entity()
 export class Worker {
@@ -39,4 +40,8 @@ export class Worker {
   @OneToMany(() => WorkerReport, (worker_report) => worker_report.worker, { onDelete: 'CASCADE' })
   @JoinColumn({ name: "worker_id" })
   worker_report: WorkerReport[];
+
+  @OneToMany(() => Appointment, (appointment) => appointment.client, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: "worker_id" })
+  appointment: Appointment[];
 }

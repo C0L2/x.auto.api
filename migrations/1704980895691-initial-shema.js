@@ -1,0 +1,111 @@
+const { MigrationInterface, QueryRunner } = require("typeorm");
+
+module.exports = class initialShema1704980895691 {
+    name = 'initialShema1704980895691'
+
+    async up(queryRunner) {
+        await queryRunner.query(`ALTER TABLE "Cars" DROP CONSTRAINT "FK_e958d875ecbcc0d455cd53fda96"`);
+        await queryRunner.query(`ALTER TABLE "Appointments" DROP CONSTRAINT "FK_f62fcdcc2faca0ebe9d7936cb0c"`);
+        await queryRunner.query(`ALTER TABLE "Appointments" DROP CONSTRAINT "FK_ebed0d3d9a3cd9fbb194caa1130"`);
+        await queryRunner.query(`CREATE TABLE "Worker" ("worker_id" SERIAL NOT NULL, "worker_name" character varying NOT NULL, "worker_surname" character varying NOT NULL, "email" character varying NOT NULL, "password" character varying NOT NULL, "role_id" integer NOT NULL, CONSTRAINT "PK_2bd156033ec33942ead5197f452" PRIMARY KEY ("worker_id"))`);
+        await queryRunner.query(`CREATE TABLE "Services" ("service_id" SERIAL NOT NULL, "service_name" character varying NOT NULL, CONSTRAINT "PK_909e9ebaace3f984d5cbf5ed55b" PRIMARY KEY ("service_id"))`);
+        await queryRunner.query(`ALTER TABLE "Cars" DROP CONSTRAINT "PK_02461f83cd622b6d0579bed3f21"`);
+        await queryRunner.query(`ALTER TABLE "Cars" DROP COLUMN "car_id"`);
+        await queryRunner.query(`ALTER TABLE "Cars" DROP COLUMN "client_id"`);
+        await queryRunner.query(`ALTER TABLE "Cars" DROP COLUMN "model"`);
+        await queryRunner.query(`ALTER TABLE "Cars" DROP COLUMN "registration_number"`);
+        await queryRunner.query(`ALTER TABLE "Cars" DROP CONSTRAINT "UQ_ffede29af21c5fcac642987bdf3"`);
+        await queryRunner.query(`ALTER TABLE "Cars" DROP COLUMN "vin_code"`);
+        await queryRunner.query(`ALTER TABLE "Cars" DROP COLUMN "culoare"`);
+        await queryRunner.query(`ALTER TABLE "Cars" DROP COLUMN "km"`);
+        await queryRunner.query(`ALTER TABLE "Cars" DROP COLUMN "year"`);
+        await queryRunner.query(`ALTER TABLE "Services" DROP CONSTRAINT "PK_909e9ebaace3f984d5cbf5ed55b"`);
+        await queryRunner.query(`ALTER TABLE "Services" DROP COLUMN "service_id"`);
+        await queryRunner.query(`ALTER TABLE "Services" DROP COLUMN "service_name"`);
+        await queryRunner.query(`ALTER TABLE "Cars" ADD "role_id" SERIAL NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "Cars" ADD CONSTRAINT "PK_af6a8c1c5a3a741ed6c179b2b26" PRIMARY KEY ("role_id")`);
+        await queryRunner.query(`ALTER TABLE "Cars" ADD "role_name" character varying NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "Services" ADD "service_id" SERIAL NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "Services" ADD CONSTRAINT "PK_909e9ebaace3f984d5cbf5ed55b" PRIMARY KEY ("service_id")`);
+        await queryRunner.query(`ALTER TABLE "Services" ADD "service_name" character varying NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "Services" ADD "report_id" SERIAL NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "Services" DROP CONSTRAINT "PK_909e9ebaace3f984d5cbf5ed55b"`);
+        await queryRunner.query(`ALTER TABLE "Services" ADD CONSTRAINT "PK_62d68e9d93935efd23da734220a" PRIMARY KEY ("service_id", "report_id")`);
+        await queryRunner.query(`ALTER TABLE "Services" ADD "worker_id" integer NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "Services" ADD "car_id" integer NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "Services" ADD "date" TIMESTAMP NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "Cars" ADD "car_id" SERIAL NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "Cars" DROP CONSTRAINT "PK_af6a8c1c5a3a741ed6c179b2b26"`);
+        await queryRunner.query(`ALTER TABLE "Cars" ADD CONSTRAINT "PK_b6690177c8d7285deb706b6289f" PRIMARY KEY ("role_id", "car_id")`);
+        await queryRunner.query(`ALTER TABLE "Cars" ADD "client_id" integer`);
+        await queryRunner.query(`ALTER TABLE "Cars" ADD "model" character varying NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "Cars" ADD "registration_number" character varying NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "Cars" ADD "vin_code" character varying NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "Cars" ADD CONSTRAINT "UQ_ffede29af21c5fcac642987bdf3" UNIQUE ("vin_code")`);
+        await queryRunner.query(`ALTER TABLE "Cars" ADD "culoare" character varying NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "Cars" ADD "km" integer NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "Cars" ADD "year" integer NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "Worker" ADD CONSTRAINT "FK_3cc00e59a1ee4fb9b0ae7575060" FOREIGN KEY ("role_id") REFERENCES "Cars"("role_id") ON DELETE CASCADE ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "Assigned Services" ADD CONSTRAINT "FK_f3e9e8f6fa4c430a022cbc766b4" FOREIGN KEY ("service_id") REFERENCES "Services"("service_id") ON DELETE CASCADE ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "Assigned Services" ADD CONSTRAINT "FK_999d89779a26e8d55d1a8def28d" FOREIGN KEY ("report_id") REFERENCES "Services"("report_id") ON DELETE CASCADE ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "Assigned Car Parts" ADD CONSTRAINT "FK_34474836368031b79948fe15c88" FOREIGN KEY ("report_id") REFERENCES "Services"("report_id") ON DELETE CASCADE ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "Services" ADD CONSTRAINT "FK_d342b9960b0908a9ad657984a07" FOREIGN KEY ("worker_id") REFERENCES "Worker"("worker_id") ON DELETE CASCADE ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "Services" ADD CONSTRAINT "FK_08cd81745b69aec8472d7b6cc14" FOREIGN KEY ("car_id") REFERENCES "Cars"("car_id") ON DELETE CASCADE ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "Cars" ADD CONSTRAINT "FK_e958d875ecbcc0d455cd53fda96" FOREIGN KEY ("client_id") REFERENCES "Client"("client_id") ON DELETE CASCADE ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "Appointments" ADD CONSTRAINT "FK_f62fcdcc2faca0ebe9d7936cb0c" FOREIGN KEY ("client_id") REFERENCES "Client"("client_id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "Appointments" ADD CONSTRAINT "FK_ebed0d3d9a3cd9fbb194caa1130" FOREIGN KEY ("worker_id") REFERENCES "Worker"("worker_id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+    }
+
+    async down(queryRunner) {
+        await queryRunner.query(`ALTER TABLE "Appointments" DROP CONSTRAINT "FK_ebed0d3d9a3cd9fbb194caa1130"`);
+        await queryRunner.query(`ALTER TABLE "Appointments" DROP CONSTRAINT "FK_f62fcdcc2faca0ebe9d7936cb0c"`);
+        await queryRunner.query(`ALTER TABLE "Cars" DROP CONSTRAINT "FK_e958d875ecbcc0d455cd53fda96"`);
+        await queryRunner.query(`ALTER TABLE "Services" DROP CONSTRAINT "FK_08cd81745b69aec8472d7b6cc14"`);
+        await queryRunner.query(`ALTER TABLE "Services" DROP CONSTRAINT "FK_d342b9960b0908a9ad657984a07"`);
+        await queryRunner.query(`ALTER TABLE "Assigned Car Parts" DROP CONSTRAINT "FK_34474836368031b79948fe15c88"`);
+        await queryRunner.query(`ALTER TABLE "Assigned Services" DROP CONSTRAINT "FK_999d89779a26e8d55d1a8def28d"`);
+        await queryRunner.query(`ALTER TABLE "Assigned Services" DROP CONSTRAINT "FK_f3e9e8f6fa4c430a022cbc766b4"`);
+        await queryRunner.query(`ALTER TABLE "Worker" DROP CONSTRAINT "FK_3cc00e59a1ee4fb9b0ae7575060"`);
+        await queryRunner.query(`ALTER TABLE "Cars" DROP COLUMN "year"`);
+        await queryRunner.query(`ALTER TABLE "Cars" DROP COLUMN "km"`);
+        await queryRunner.query(`ALTER TABLE "Cars" DROP COLUMN "culoare"`);
+        await queryRunner.query(`ALTER TABLE "Cars" DROP CONSTRAINT "UQ_ffede29af21c5fcac642987bdf3"`);
+        await queryRunner.query(`ALTER TABLE "Cars" DROP COLUMN "vin_code"`);
+        await queryRunner.query(`ALTER TABLE "Cars" DROP COLUMN "registration_number"`);
+        await queryRunner.query(`ALTER TABLE "Cars" DROP COLUMN "model"`);
+        await queryRunner.query(`ALTER TABLE "Cars" DROP COLUMN "client_id"`);
+        await queryRunner.query(`ALTER TABLE "Cars" DROP CONSTRAINT "PK_b6690177c8d7285deb706b6289f"`);
+        await queryRunner.query(`ALTER TABLE "Cars" ADD CONSTRAINT "PK_af6a8c1c5a3a741ed6c179b2b26" PRIMARY KEY ("role_id")`);
+        await queryRunner.query(`ALTER TABLE "Cars" DROP COLUMN "car_id"`);
+        await queryRunner.query(`ALTER TABLE "Services" DROP COLUMN "date"`);
+        await queryRunner.query(`ALTER TABLE "Services" DROP COLUMN "car_id"`);
+        await queryRunner.query(`ALTER TABLE "Services" DROP COLUMN "worker_id"`);
+        await queryRunner.query(`ALTER TABLE "Services" DROP CONSTRAINT "PK_62d68e9d93935efd23da734220a"`);
+        await queryRunner.query(`ALTER TABLE "Services" ADD CONSTRAINT "PK_909e9ebaace3f984d5cbf5ed55b" PRIMARY KEY ("service_id")`);
+        await queryRunner.query(`ALTER TABLE "Services" DROP COLUMN "report_id"`);
+        await queryRunner.query(`ALTER TABLE "Services" DROP COLUMN "service_name"`);
+        await queryRunner.query(`ALTER TABLE "Services" DROP CONSTRAINT "PK_909e9ebaace3f984d5cbf5ed55b"`);
+        await queryRunner.query(`ALTER TABLE "Services" DROP COLUMN "service_id"`);
+        await queryRunner.query(`ALTER TABLE "Cars" DROP COLUMN "role_name"`);
+        await queryRunner.query(`ALTER TABLE "Cars" DROP CONSTRAINT "PK_af6a8c1c5a3a741ed6c179b2b26"`);
+        await queryRunner.query(`ALTER TABLE "Cars" DROP COLUMN "role_id"`);
+        await queryRunner.query(`ALTER TABLE "Services" ADD "service_name" character varying NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "Services" ADD "service_id" SERIAL NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "Services" ADD CONSTRAINT "PK_909e9ebaace3f984d5cbf5ed55b" PRIMARY KEY ("service_id")`);
+        await queryRunner.query(`ALTER TABLE "Cars" ADD "year" integer NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "Cars" ADD "km" integer NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "Cars" ADD "culoare" character varying NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "Cars" ADD "vin_code" character varying NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "Cars" ADD CONSTRAINT "UQ_ffede29af21c5fcac642987bdf3" UNIQUE ("vin_code")`);
+        await queryRunner.query(`ALTER TABLE "Cars" ADD "registration_number" character varying NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "Cars" ADD "model" character varying NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "Cars" ADD "client_id" integer`);
+        await queryRunner.query(`ALTER TABLE "Cars" ADD "car_id" SERIAL NOT NULL`);
+        await queryRunner.query(`ALTER TABLE "Cars" ADD CONSTRAINT "PK_02461f83cd622b6d0579bed3f21" PRIMARY KEY ("car_id")`);
+        await queryRunner.query(`DROP TABLE "Services"`);
+        await queryRunner.query(`DROP TABLE "Worker"`);
+        await queryRunner.query(`ALTER TABLE "Appointments" ADD CONSTRAINT "FK_ebed0d3d9a3cd9fbb194caa1130" FOREIGN KEY ("worker_id") REFERENCES "worker"("worker_id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "Appointments" ADD CONSTRAINT "FK_f62fcdcc2faca0ebe9d7936cb0c" FOREIGN KEY ("client_id") REFERENCES "client"("client_id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+        await queryRunner.query(`ALTER TABLE "Cars" ADD CONSTRAINT "FK_e958d875ecbcc0d455cd53fda96" FOREIGN KEY ("client_id") REFERENCES "Client"("client_id") ON DELETE CASCADE ON UPDATE NO ACTION`);
+    }
+}

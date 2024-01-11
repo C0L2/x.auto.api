@@ -62,9 +62,9 @@ export class ClientController {
     })
     async createClient(@Body() body: CreateClientDto) {
         await this.clientService.create(
-            body.nume_client,
+            body.client_name,
             body.email,
-            body.numar_telefon,
+            body.phone_number,
         );
         return { message: 'Successfully added new client', programare: body };
     }

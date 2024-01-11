@@ -2,10 +2,13 @@ import { IsDateString, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateProgramareDto {
     @IsString()
-    programare_name: string;
+    appointment_name: string;
 
     @IsDateString()
-    programare_date: string;
+    appointment_start_date: string;
+
+    @IsDateString()
+    appointment_finish_date: string;
 
     @IsOptional()
     @IsString()
@@ -14,4 +17,7 @@ export class CreateProgramareDto {
     @IsOptional()
     @IsNumber()
     client_id: number;
+
+    @IsNumber()
+    worker_id: number;
 }

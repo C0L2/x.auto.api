@@ -10,7 +10,7 @@ import { SessionModule } from 'nestjs-session';
 import { RoleModule } from './role/role.module';
 import { ServicesModule } from './services/services.module';
 import { ClientModule } from './client/client.module';
-import { ProgramariModule } from './programari/programari.module';
+import { AppointmentModule } from './programari/appointment.module';
 import { MasiniModule } from './masini/masini.module';
 import { CarPartsModule } from './car-parts/car-parts.module';
 import { WorkerReportModule } from './worker-report/worker-report.module';
@@ -37,7 +37,7 @@ dotenv.config();
     RoleModule,
     ServicesModule,
     ClientModule,
-    ProgramariModule,
+    AppointmentModule,
     MasiniModule,
     CarPartsModule,
     WorkerReportModule,
